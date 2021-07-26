@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  shaula:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shaula
+    volumes:
+      - ./:/shaula
+    ports:
+      - "22:22"
+      - "8080:80"
+      - "18333:18333"
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
