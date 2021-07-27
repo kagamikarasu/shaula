@@ -15,6 +15,10 @@
 #include <vector>
 #include <string>
 
+/**
+ * Encode Class
+ * It is mainly used to convert from a other types to byte.
+ */
 class Encode {
 public:
     /**
@@ -48,20 +52,21 @@ public:
      */
     static std::vector<unsigned char> toByteHexBig(uint64_t n, size_t length);
     /**
-     *
+     * bool to 1byte hex
      * @param b
      * @return
      */
     static unsigned char toByteHex(bool b);
     /**
-     *
+     * Fill in the specified number of null bytes.
+     * (This function actually just turns a string into a sequence of bytes.)
      * @param str
      * @return
      */
     static std::vector<unsigned char> fill(const std::string &str);
 
     /**
-     *
+     * Fill in the specified number of null bytes.
      * @param str
      * @param length
      * @return
