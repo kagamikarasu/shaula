@@ -14,12 +14,13 @@
 #include <vector>
 #include "Message.h"
 
+/**
+ * Create a Mempool request.
+ * Mempool is an empty payload.
+ */
 class Mempool : public Message{
 public:
-    explicit Mempool(){
-        setCommand(Command.MEMPOOL);
-    }
-    std::vector<unsigned char> getMessage() override;
+    explicit Mempool();
 };
 
 

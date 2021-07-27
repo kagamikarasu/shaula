@@ -10,7 +10,6 @@
 
 #include "Mempool.h"
 
-std::vector<unsigned char> Mempool::getMessage() {
-    payload_.clear();
-    return Message::getMessage();
+Mempool::Mempool() {
+    setCommand(Command.MEMPOOL);
 }
