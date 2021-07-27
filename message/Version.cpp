@@ -53,35 +53,37 @@ void Version::setRelay(bool relay) {
 }
 
 void Version::setPayload() {
-    payload_.clear();
+    std::vector<unsigned char> payload;
 
     auto version = Encode::to4ByteHex(version_);
-    payload_.insert(payload_.end(), version.begin(), version.end());
+    payload.insert(payload.end(), version.begin(), version.end());
 
     auto service = Encode::to8ByteHex(service_);
-    payload_.insert(payload_.end(), service.begin(), service.end());
+    payload.insert(payload.end(), service.begin(), service.end());
 
     auto timestamp = Encode::to8ByteHex(timestamp_);
-    payload_.insert(payload_.end(), timestamp.begin(), timestamp.end());
+    payload.insert(payload.end(), timestamp.begin(), timestamp.end());
 
     auto addr_recv = addr_recv_.getHexNoneTimestamp();
-    payload_.insert(payload_.end(), addr_recv.begin(), addr_recv.end());
+    payload.insert(payload.end(), addr_recv.begin(), addr_recv.end());
 
     auto addr_from = addr_from_.getZeroAddressHex();
-    payload_.insert(payload_.end(), addr_from.begin(), addr_from.end());
+    payload.insert(payload.end(), addr_from.begin(), addr_from.end());
 
-    payload_.insert(payload_.end(), nonce_.begin(), nonce_.end());
+    payload.insert(payload.end(), nonce_.begin(), nonce_.end());
 
     auto user_agent_length = user_agent_.length();
-    payload_.insert(payload_.end(), user_agent_length);
+    payload.insert(payload.end(), user_agent_length);
 
     auto user_agent = Encode::fill(user_agent_);
-    payload_.insert(payload_.end(), user_agent.begin(), user_agent.end());
+    payload.insert(payload.end(), user_agent.begin(), user_agent.end());
 
     auto start_height = Encode::to4ByteHex(start_height_);
-    payload_.insert(payload_.end(), start_height.begin(), start_height.end());
+    payload.insert(payload.end(), start_height.begin(), start_height.end());
 
-    payload_.insert(payload_.end(), relay_);
+    payload.insert(payload.end(), relay_);
+
+    Message::setPayload(payload);
 }
 
 std::vector<unsigned char> Version::getMessage(){

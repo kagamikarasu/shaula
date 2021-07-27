@@ -19,9 +19,11 @@ void Ping::setNonce(const std::vector<unsigned char> &bytes) {
 }
 
 std::vector<unsigned char> Ping::getMessage() {
-    payload_.clear();
+    std::vector<unsigned char> payload;
 
-    payload_.insert(payload_.end(), nonce_.begin(), nonce_.end());
+    payload.insert(payload.end(), nonce_.begin(), nonce_.end());
+
+    Message::setPayload(payload);
 
     return Message::getMessage();
 }

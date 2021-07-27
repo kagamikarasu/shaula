@@ -10,12 +10,24 @@
 
 #include "Message.h"
 
-void Message::setCommand(std::string &command) {
-    header_->setCommand(command);
+Message::Message() : header_(std::make_unique<Header>()){
 }
 
-void Message::setPayload(std::vector<unsigned char> bytes) {
-    payload_ = std::move(bytes);
+Message::Message(const Header &header, const std::vector<unsigned char> &body) {
+    setHeader(header);
+    setPayload(body);
+}
+
+void Message::setHeader(const Header &header) {
+    header_ = std::make_unique<Header>(header);
+}
+
+void Message::setPayload(const std::vector<unsigned char> &bytes) {
+    payload_ = bytes;
+}
+
+void Message::setCommand(const std::string &command) {
+    header_->setCommand(command);
 }
 
 void Message::setLength(){
@@ -46,16 +58,4 @@ std::vector<unsigned char> Message::getMessage() {
     message.insert(message.end(), payload_.begin(), payload_.end());
 
     return message;
-}
-
-std::vector<unsigned char> Message::getHeader(){
-    return header_->getHex();
-}
-
-std::vector<unsigned char> Message::getBody(){
-    return payload_;
-}
-
-std::string Message::getCommand() {
-    return header_->getCommand();
 }
