@@ -10,3 +10,6 @@
 
 #include "GetAddr.h"
 
+GetAddr::GetAddr() {
+    setCommand(Command.GETADDR);
+}

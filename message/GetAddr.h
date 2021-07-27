@@ -13,11 +13,13 @@
 
 #include "Message.h"
 
+/**
+ * Create a GetAddr request.
+ * GetAddr is an empty payload.
+ */
 class GetAddr : public Message {
 public:
-    explicit GetAddr(){
-        setCommand(Command.GETADDR);
-    }
+    explicit GetAddr();
 };
 
 
