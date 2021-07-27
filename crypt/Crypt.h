@@ -20,6 +20,10 @@
 #include <openssl/ripemd.h>
 #include <openssl/rand.h>
 
+/**
+ * Crypt Class
+ * You can get SHA256(+double) / ripemd160 / BASE58 / random from any byte sequence.
+ */
 class Crypt {
 public:
     /**
@@ -75,7 +79,8 @@ public:
     static std::vector<unsigned char> toHexFromHexStr(const std::string &hex_bin);
 
     /**
-     *
+     * Returns a random value with as many digits as the specified number.
+     * Mainly when you want a nonce value.
      * @param size
      * @return
      */
