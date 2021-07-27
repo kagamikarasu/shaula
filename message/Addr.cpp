@@ -10,6 +10,15 @@
 
 #include "Addr.h"
 
+Addr::Addr(const std::vector<unsigned char> &bytes) {
+    setVarInt(bytes);
+    setAddrList(bytes);
+}
+
+void Addr::setVarInt(const std::vector<unsigned char> &bytes) {
+    var_int_ = std::make_unique<VarInt>(bytes);
+}
+
 void Addr::setAddrList(const std::vector<unsigned char> &bytes){
 
     uint8_t read_position = var_int_->getPosition();
