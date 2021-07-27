@@ -33,7 +33,7 @@ void NetAddr::setService(const std::vector<unsigned char> &&bytes) {
     service_ = Decode::toByteInt(bytes);
 }
 
-void NetAddr::setAddr(Endpoint &endpoint){
+void NetAddr::setAddr(const Endpoint &endpoint){
     if(endpoint.remote_address.is_v4()) {
         address_ = boost::asio::ip::make_address_v6(boost::asio::ip::v4_mapped, endpoint.remote_address.to_v4());
         return;
@@ -49,7 +49,7 @@ void NetAddr::setAddr(const std::vector<unsigned char> &&bytes) {
     address_ = boost::asio::ip::address_v6(addr);
 }
 
-void NetAddr::setPort(Endpoint &endpoint){
+void NetAddr::setPort(const Endpoint &endpoint){
     port_ = endpoint.remote_port;
 }
 

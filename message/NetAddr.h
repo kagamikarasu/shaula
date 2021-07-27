@@ -86,7 +86,7 @@ public:
     /**
      * Set the ipv6 of the this project.
      */
-    void setAddr(Endpoint&);
+    void setAddr(const Endpoint &endpoint);
 
     /**
      * Set the ipv6 of the response result.
@@ -97,7 +97,7 @@ public:
     /**
      * Set the port.
      */
-    void setPort(Endpoint&);
+    void setPort(const Endpoint &endpoint);
 
     /**
      * Get a sequence of bytes.

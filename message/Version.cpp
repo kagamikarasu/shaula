@@ -10,6 +10,21 @@
 
 #include "Version.h"
 
+
+Version::Version(const Endpoint &endpoint) {
+    setVersion(versionMeta.PROTOCOL_VERSION_NUMBER);
+    setService(versionMeta.SERVICE);
+    setTimestamp();
+    setAddrRecv(endpoint);
+    setAddrFrom(endpoint);
+    setNonce(Crypt::getRand(8));
+    setUserAgent(versionMeta.USER_AGENT);
+    setBlockStart(0);
+    setRelay(true);
+
+    setCommand(Command.VERSION);
+}
+
 void Version::setVersion(uint32_t version){
     version_ = version;
 }
@@ -23,13 +38,13 @@ void Version::setTimestamp(){
                     std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void Version::setAddrRecv(Endpoint &endpoint) {
+void Version::setAddrRecv(const Endpoint &endpoint) {
     addr_recv_.setAddr(endpoint);
     addr_recv_.setPort(endpoint);
     addr_recv_.setService({0x00});
 }
 
-void Version::setAddrFrom(Endpoint &endpoint){
+void Version::setAddrFrom(const Endpoint &endpoint){
     // After Zero Return
     addr_from_.setAddr(endpoint);
     addr_from_.setPort(endpoint);
