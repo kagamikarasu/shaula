@@ -10,27 +10,26 @@
 
 #include "Header.h"
 
-Header::Header(std::vector<unsigned char> header_bytes) {
-    magic_ = {&header_bytes[0], &header_bytes[4]};
-
-    std::vector<unsigned char> command = {&header_bytes[4], &header_bytes[16]};
-    setCommand(command);
-
-    std::vector<unsigned char> payload_length = {&header_bytes[16], &header_bytes[20]};
-    setPayloadLength(payload_length);
-
-    payload_checksum_ = {&header_bytes[20], &header_bytes[24]};
+Header::Header() {
+    setMagic(versionMeta.NETWORK);
 }
 
-void Header::setMagic(std::vector<unsigned char> magic){
-    magic_ = std::move(magic);
+Header::Header(const std::vector<unsigned char> &header_bytes) {
+    setMagic(std::vector<unsigned char>({&header_bytes[0], &header_bytes[4]}));
+    setCommand(std::vector<unsigned char>({&header_bytes[4], &header_bytes[16]}));
+    setPayloadLength(std::vector<unsigned char>({&header_bytes[16], &header_bytes[20]}));
+    setPayloadChecksum(std::vector<unsigned char>({&header_bytes[20], &header_bytes[24]}));
 }
 
-void Header::setCommand(std::string &command){
+void Header::setMagic(const std::vector<unsigned char> &magic){
+    magic_ = magic;
+}
+
+void Header::setCommand(const std::string &command){
     command_ = command;
 }
 
-void Header::setCommand(std::vector<unsigned char> &command){
+void Header::setCommand(const std::vector<unsigned char> &command){
     command_ = Decode::unFillToString(command);
 }
 
@@ -38,12 +37,12 @@ void Header::setPayloadLength(uint32_t &payload_length) {
     payload_length_ = payload_length;
 }
 
-void Header::setPayloadLength(std::vector<unsigned char> &payload_length){
+void Header::setPayloadLength(const std::vector<unsigned char> &payload_length){
     payload_length_ = Decode::toByteInt(payload_length);
 }
 
-void Header::setPayloadChecksum(std::vector<unsigned char> payload_checksum){
-    payload_checksum_ = std::move(payload_checksum);
+void Header::setPayloadChecksum(const std::vector<unsigned char> &payload_checksum){
+    payload_checksum_ = payload_checksum;
 }
 
 std::vector<unsigned char> Header::getMagic(){
