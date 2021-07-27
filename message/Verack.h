@@ -13,11 +13,18 @@
 
 #include "Message.h"
 
+/**
+ * Verack Class
+ * After receiving the Version request, continue to receive the Verack.
+ * By receiving the Verack and sending this side too, other commands can be used.
+ */
 class Verack : public Message{
 public:
-    explicit Verack(){
-        setCommand(Command.VERACK);
-    };
+    /**
+     * Constructor
+     * There is no payload.
+     */
+    explicit Verack();
 };
 
 

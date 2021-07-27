@@ -10,6 +10,11 @@
 
 #include "VarInt.h"
 
+VarInt::VarInt(const std::vector<unsigned char> &bytes) {
+    setKey(bytes);
+    setLength(bytes);
+}
+
 void VarInt::setKey(const std::vector<unsigned char> &bytes){
     if(bytes[0] == 0xFD || bytes[0] == 0xFE || bytes[0] == 0xFF){
         key_ = bytes[0];

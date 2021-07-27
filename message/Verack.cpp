@@ -9,3 +9,7 @@
 //
 
 #include "Verack.h"
+
+Verack::Verack() {
+    setCommand(Command.VERACK);
+}
