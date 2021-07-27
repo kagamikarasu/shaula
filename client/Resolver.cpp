@@ -13,6 +13,8 @@
 
 std::vector<boost::asio::ip::address_v6> Resolver::getAddresses(boost::asio::io_context &ioContext, const std::string &hostname) {
     boost::asio::ip::tcp::resolver resolver_(ioContext);
+
+    // Although netbase is required, port number 80 is also possible.
     boost::asio::ip::tcp::resolver::query query(hostname, "http");
     auto results = resolver_.resolve(query);
 

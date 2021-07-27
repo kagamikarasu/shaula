@@ -54,7 +54,7 @@ void ClientPool::_run(const std::string &address){
 }
 
 void ClientPool::resize(boost::asio::io_context &io_context){
-    // Delete Client from ConnectionPool
+    // Removes a closed client from the connection pool.
     auto itd = getInstance().connection_pool_.begin();
     while (itd != getInstance().connection_pool_.end()) {
         if (!itd->second.isOpen()) {
@@ -62,7 +62,7 @@ void ClientPool::resize(boost::asio::io_context &io_context){
         } else ++itd;
     }
 
-    // Add ConnectionPool from UnusedPool
+    // Promotes an unused connection pool to a connected pool.
     auto ita = getInstance().unused_pool_.begin();
     while(ita != getInstance().unused_pool_.end()){
         if(isMaxConnection()){
