@@ -10,6 +10,15 @@
 
 #include "Ping.h"
 
+Ping::Ping() {
+    setCommand(Command.PING);
+    setNonce();
+}
+
+Ping::Ping(const std::vector<unsigned char> &bytes) {
+    setNonce(bytes);
+}
+
 void Ping::setNonce() {
     nonce_ = Crypt::getRand(8);
 }

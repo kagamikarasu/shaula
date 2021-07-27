@@ -10,8 +10,9 @@
 
 #include "Pong.h"
 
-void Pong::setNonce() {
-    nonce_ = Crypt::getRand(8);
+Pong::Pong(const std::vector<unsigned char> &bytes) {
+    setCommand(Command.PONG);
+    setNonce(bytes);
 }
 
 void Pong::setNonce(const std::vector<unsigned char> &bytes) {
