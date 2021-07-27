@@ -93,8 +93,20 @@ void Node::sendRaw(const boost::asio::yield_context &yield, const std::string &h
 }
 
 void Node::setAddr(){
-    endpoint_.local_address = socket_->local_endpoint().address().to_v6();
-    endpoint_.remote_address = socket_->remote_endpoint().address().to_v6();
+    if(socket_->local_endpoint().address().is_v4()){
+        endpoint_.local_address = boost::asio::ip::make_address_v6(
+                boost::asio::ip::v4_mapped, socket_->local_endpoint().address().to_v4());
+    }else{
+        endpoint_.local_address = socket_->local_endpoint().address().to_v6();
+    }
+
+    if(socket_->remote_endpoint().address().is_v4()){
+        endpoint_.remote_address = boost::asio::ip::make_address_v6(
+                boost::asio::ip::v4_mapped, socket_->remote_endpoint().address().to_v4());
+    }else{
+        endpoint_.remote_address = socket_->remote_endpoint().address().to_v6();
+    }
+
     endpoint_.local_port = socket_->local_endpoint().port();
     endpoint_.remote_port = socket_->remote_endpoint().port();
 }

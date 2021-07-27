@@ -34,6 +34,7 @@ void Session::receive(const boost::asio::yield_context &yield){
         body = getBody(yield, *header);
     }catch(std::exception& e){
         close();
+        return;
     }
 
     // version
