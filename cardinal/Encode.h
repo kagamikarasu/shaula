@@ -21,6 +21,14 @@
  */
 class Encode {
 public:
+
+    /**
+     * int to 1byte hex
+     * @param n
+     * @return
+     */
+    static std::vector<unsigned char> to1ByteHex(uint8_t n);
+
     /**
      * int to 2byte hex
      * (Little Endian)

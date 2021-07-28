@@ -25,12 +25,33 @@ Version::Version(const Endpoint &endpoint) {
     setCommand(Command.VERSION);
 }
 
+Version::Version(const std::vector<unsigned char> &bytes) {
+    setVersion({&bytes[0], &bytes[4]});
+    setService({&bytes[4], &bytes[12]});
+    setTimestamp({&bytes[12], &bytes[20]});
+    setAddrRecv({&bytes[20], &bytes[46]});
+    setAddrFrom({&bytes[46], &bytes[72]});
+    setNonce({&bytes[72], &bytes[80]});
+    // explicitly
+    setUserAgent(std::vector<unsigned char>({&bytes[80], &bytes[bytes.size()]}));
+
+    return;
+}
+
 void Version::setVersion(uint32_t version){
     version_ = version;
 }
 
+void Version::setVersion(const std::vector<unsigned char> &bytes){
+    setVersion(Decode::toByteInt(bytes));
+}
+
 void Version::setService(uint64_t service){
     service_ = service;
+}
+
+void Version::setService(const std::vector<unsigned char> &bytes){
+    setService(Decode::toByteInt(bytes));
 }
 
 void Version::setTimestamp(){
@@ -38,10 +59,22 @@ void Version::setTimestamp(){
                     std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
+void Version::setTimestamp(uint64_t timestamp) {
+    timestamp_ = timestamp;
+}
+
+void Version::setTimestamp(const std::vector<unsigned char> &bytes) {
+    setTimestamp(Decode::toByteInt(bytes));
+}
+
 void Version::setAddrRecv(const Endpoint &endpoint) {
     addr_recv_.setAddr(endpoint);
     addr_recv_.setPort(endpoint);
     addr_recv_.setService({0x00});
+}
+
+void Version::setAddrRecv(const std::vector<unsigned char> &bytes) {
+    addr_recv_ = std::move(NetAddr(bytes));
 }
 
 void Version::setAddrFrom(const Endpoint &endpoint){
@@ -51,12 +84,20 @@ void Version::setAddrFrom(const Endpoint &endpoint){
     addr_from_.setService();
 }
 
+void Version::setAddrFrom(const std::vector<unsigned char> &bytes) {
+    addr_from_ = std::move(NetAddr(bytes));
+}
+
 void Version::setNonce(std::vector<unsigned char> nonce){
     nonce_ = std::move(nonce);
 }
 
-void Version::setUserAgent(std::string user_agent){
-    user_agent_ = std::move(user_agent);
+void Version::setUserAgent(const std::string &user_agent){
+    user_agent_ = std::move(VarStr(user_agent));
+}
+
+void Version::setUserAgent(const std::vector<unsigned char> &bytes){
+    user_agent_ = std::move(VarStr(bytes));
 }
 
 void Version::setBlockStart(uint32_t start_height){
@@ -87,10 +128,7 @@ void Version::setPayload() {
 
     payload.insert(payload.end(), nonce_.begin(), nonce_.end());
 
-    auto user_agent_length = user_agent_.length();
-    payload.insert(payload.end(), user_agent_length);
-
-    auto user_agent = Encode::fill(user_agent_);
+    auto user_agent = user_agent_.getPayload();
     payload.insert(payload.end(), user_agent.begin(), user_agent.end());
 
     auto start_height = Encode::to4ByteHex(start_height_);

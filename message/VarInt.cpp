@@ -15,6 +15,14 @@ VarInt::VarInt(const std::vector<unsigned char> &bytes) {
     setLength(bytes);
 }
 
+VarInt::VarInt(const std::string &str) {
+    /**
+     * Needs to be fixed.
+     */
+    setKey({0x00});
+    setLength(Encode::to1ByteHex(str.size()));
+}
+
 void VarInt::setKey(const std::vector<unsigned char> &bytes){
     if(bytes[0] == 0xFD || bytes[0] == 0xFE || bytes[0] == 0xFF){
         key_ = bytes[0];

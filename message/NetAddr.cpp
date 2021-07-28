@@ -11,9 +11,20 @@
 
 
 NetAddr::NetAddr(const std::vector<unsigned char> &bytes) {
+
+    // For Version Message.(26bytes)
+    if(bytes.size() == 26){
+        setService({&bytes[0], &bytes[8]});
+        setAddr({&bytes[8], &bytes[24]});
+        setPort({&bytes[24], &bytes[26]});
+        return;
+    }
+
+    // Other than that. Probably Addr
     setTimestamp({&bytes[0], &bytes[4]});
     setService({&bytes[4], &bytes[12]});
     setAddr({&bytes[12], &bytes[28]});
+    setPort({&bytes[28], &bytes[30]});
 }
 
 void NetAddr::setTimestamp(){
@@ -51,6 +62,10 @@ void NetAddr::setAddr(const std::vector<unsigned char> &&bytes) {
 
 void NetAddr::setPort(const Endpoint &endpoint){
     port_ = endpoint.remote_port;
+}
+
+void NetAddr::setPort(const std::vector<unsigned char> &bytes){
+    port_ = Decode::toByteIntBig(bytes);
 }
 
 std::vector<unsigned char> NetAddr::getHex() {

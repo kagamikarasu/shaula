@@ -25,7 +25,15 @@ public:
      * @param bytes
      * @return
      */
-    static int32_t toByteInt(std::vector<unsigned char> bytes);
+    static int32_t toByteInt(const std::vector<unsigned char> &bytes);
+
+    /**
+     * Hex to byte int
+     * (Big Endian)
+     * @param bytes
+     * @return
+     */
+    static int32_t toByteIntBig(const std::vector<unsigned char> &bytes);
 
     /**
      * Returns a string, ignoring the null byte sequence

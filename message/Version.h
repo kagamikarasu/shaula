@@ -12,6 +12,7 @@
 #define SHAULA_VERSION_H
 
 #include "Message.h"
+#include "VarStr.h"
 
 struct {
     uint8_t version = 4;
@@ -64,7 +65,7 @@ class Version : public Message {
     /**
      * User Agent
      */
-    std::string user_agent_;
+    VarStr user_agent_;
 
     /**
      * The height of the block you are holding
@@ -86,6 +87,12 @@ public:
     explicit Version(const Endpoint &endpoint);
 
     /**
+     * Create a constructor from response.
+     * @param bytes
+     */
+    explicit Version(const std::vector<unsigned char> &bytes);
+
+    /**
      * Override getMessage of the message class to get a message that can be sent.
      * @return
      */
@@ -98,9 +105,21 @@ private:
     void setVersion(uint32_t);
 
     /**
+     * Set Version From Bytes
+     * @param bytes
+     */
+    void setVersion(const std::vector<unsigned char> &bytes);
+
+    /**
      * Set Service From Int
      */
     void setService(uint64_t);
+
+    /**
+     * Set Service From Bytes
+     * @param bytes
+     */
+    void setService(const std::vector<unsigned char> &bytes);
 
     /**
      * Set Now
@@ -108,14 +127,40 @@ private:
     void setTimestamp();
 
     /**
+     * Set Timestamp FromInt
+     * @param timestamp
+     */
+    void setTimestamp(uint64_t timestamp);
+
+    /**
+     * Set Timestamp From Timestamp
+     * @param bytes
+     */
+    void setTimestamp(const std::vector<unsigned char> &bytes);
+
+    /**
      * Set NetAddr Recv
+     * @param endpoint
      */
     void setAddrRecv(const Endpoint &endpoint);
 
     /**
+     * Set NetAddr Recv From bytes
+     * @param bytes
+     */
+    void setAddrRecv(const std::vector<unsigned char> &bytes);
+
+    /**
      * Set NetAddr Emmit
+     * @param endpoint
      */
     void setAddrFrom(const Endpoint &endpoint);
+
+    /**
+     * Set NetAddr Emmit From bytes
+     * @param bytes
+     */
+    void setAddrFrom(const std::vector<unsigned char> &bytes);
 
     /**
      * Set Nonce
@@ -125,7 +170,13 @@ private:
     /**
      * Set User agent
      */
-    void setUserAgent(std::string);
+    void setUserAgent(const std::string &user_agent);
+
+    /**
+     * Set User agent From bytes
+     * @param bytes
+     */
+    void setUserAgent(const std::vector<unsigned char> &bytes);
 
     /**
      * Set BlockStart

@@ -22,6 +22,7 @@
  * https://en.bitcoin.it/wiki/Protocol_documentation#Variable_length_integer
  */
 class VarInt {
+
     /**
      * First Byte Value.
      * It doesn't make any sense.
@@ -40,13 +41,26 @@ class VarInt {
 
 
 public:
+
+    explicit VarInt() = default;
+
     /**
      * The argument is a string of bytes that VarInt will start with.
      * The first byte stores the actual data read start position in "position_".
      * Also, the actual data size is stored in "length_".
+     * Used to receive requests.
      * @param bytes
      */
     explicit VarInt(const std::vector<unsigned char> &bytes);
+
+    /**
+     * !!!!!!!Needs to be fixed.!!!!!!!!!!
+     * This constructor is for VarStr.
+     * Currently, only 1 byte size (255 length) is supported.
+     * Used to send a request.
+     * @param str
+     */
+    explicit VarInt(const std::string &str);
 
     /**
      * Get the start reading position.

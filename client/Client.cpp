@@ -63,6 +63,11 @@ void Client::_receive(const boost::asio::yield_context& yield){
         return;
     }
 
+    // version
+    if(header->isVersion()){
+        std::unique_ptr<Version> version = std::make_unique<Version>(body);
+    }
+
     // verack
     if(header->isVerack()){
         sendVerack(yield);

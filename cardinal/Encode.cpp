@@ -10,6 +10,10 @@
 
 #include "Encode.h"
 
+std::vector<unsigned char> Encode::to1ByteHex(uint8_t n){
+    return toByteHex(n , 1);
+}
+
 std::vector<unsigned char> Encode::to2ByteHex(uint16_t n){
     return toByteHex(n , 2);
 }

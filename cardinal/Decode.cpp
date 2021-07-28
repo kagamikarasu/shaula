@@ -11,10 +11,18 @@
 #include <string>
 #include "Decode.h"
 
-int32_t Decode::toByteInt(std::vector<unsigned char> bytes){
+int32_t Decode::toByteInt(const std::vector<unsigned char> &bytes){
     int n = 0;
-    for(int i = 0 ; i < bytes.size() ; i++){
+    for(int i = 0 ; i < bytes.size() ; ++i){
         n += bytes[i] * std::pow(256, i);
+    }
+    return n;
+}
+
+int32_t Decode::toByteIntBig(const std::vector<unsigned char> &bytes){
+    int n = 0;
+    for(int i = 0 ; i < bytes.size() ; ++i){
+        n += bytes[i] * std::pow(256, (bytes.size()-1) - i);
     }
     return n;
 }

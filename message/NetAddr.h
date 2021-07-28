@@ -56,8 +56,7 @@ public:
 
     /**
      * Set the addr from the response.
-     * The argument must be in the range of addr (30bytes).
-     * This constructor only supports the Addr command.
+     * The argument must be in the range of addr (26/30bytes).
      * @param bytes
      */
     explicit NetAddr(const std::vector<unsigned char> &bytes);
@@ -98,6 +97,12 @@ public:
      * Set the port.
      */
     void setPort(const Endpoint &endpoint);
+
+    /**
+     * Set the port From bytes.
+     * @param bytes
+     */
+    void setPort(const std::vector<unsigned char> &bytes);
 
     /**
      * Get a sequence of bytes.
