@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 RUN apt update && \
-    apt install -y gcc-10 g++-10 cmake libboost-dev libssl-dev netbase libboost-thread-dev libboost-coroutine-dev libbase58-dev rsync openssh-server gdb && \
+    apt install -y gcc-10 g++-10 cmake libboost-dev libssl-dev netbase libncurses-dev libboost-thread-dev libboost-coroutine-dev libbase58-dev rsync openssh-server gdb && \
     mkdir /run/sshd && \
     echo 'root:root' | chpasswd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
