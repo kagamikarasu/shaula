@@ -41,7 +41,7 @@ public:
      * Singleton
      * @return
      */
-    static ClientPool& getInstance();
+    static ClientPool* getInstance();
 
     /**
      * Add Connection From Domain
@@ -50,7 +50,7 @@ public:
      * @param dns_address
      * @param port
      */
-    static void add(boost::asio::io_context &io_context, const std::string &dns_address, uint16_t port);
+    static void add(std::vector<std::shared_ptr<boost::asio::io_context>> &io_context, const std::string &dns_address, uint16_t port);
 
     /**
      * Add Connection From NetAddrVector

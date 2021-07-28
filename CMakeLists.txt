@@ -10,7 +10,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE boost_coroutine Threads::Threads OpenSSL::Crypto base58)
+target_link_libraries(${PROJECT_NAME} PRIVATE boost_coroutine boost_thread Threads::Threads OpenSSL::Crypto base58)
 
 aux_source_directory(client CLIENT_SRC)
 aux_source_directory(crypt CRYPT_SRC)

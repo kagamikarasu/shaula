@@ -8,6 +8,7 @@
 // https://github.com/kagamikarasu/shaula/
 //
 
+#include <boost/thread.hpp>
 #include "Client.h"
 #include "ClientPool.h"
 
@@ -84,7 +85,10 @@ void Client::_receive(const boost::asio::yield_context& yield){
 
     auto message = new Message(*header, body);
 
-    printf("Client Receive Message:");
+    std::ostringstream oss;
+    oss << boost::this_thread::get_id();
+    printf("(%s) - Client Receive Message:", oss.str().c_str());
+
     for(const unsigned char value : message->getMessage()) {
         printf(" %02x", value);
     }

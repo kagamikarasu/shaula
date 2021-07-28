@@ -10,19 +10,25 @@
 
 #include <server/Server.h>
 #include <client/ClientPool.h>
+#include <boost/thread.hpp>
 
 int main() {
-    boost::asio::io_context ioContext;
+    boost::thread_group threadGroup;
+    std::vector<std::shared_ptr<boost::asio::io_context>> io_contexts;
 
-    // Listen run
-    std::unique_ptr<Server> s = std::make_unique<Server>(ioContext);
-    s->run();
+    // Server run
+    Server::run(io_contexts);
 
     // Client run
-    //ClientPool::add(ioContext, "testnet-seed.bitcoin.jonasschnelli.ch", 18333);
-    ClientPool::add(ioContext, "host.docker.internal", 18333);
+    //ClientPool::add(io_contexts, "testnet-seed.bitcoin.jonasschnelli.ch", 18333);
+    ClientPool::add(io_contexts, "host.docker.internal", 18333);
 
-    ioContext.run();
+
+    for(const std::shared_ptr<boost::asio::io_context>& io_context_client : io_contexts){
+        threadGroup.create_thread([io_context_client] { io_context_client->run(); });
+    }
+
+    threadGroup.join_all();
 
     return 0;
 }

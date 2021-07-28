@@ -21,9 +21,14 @@
 class Server {
 private:
     /**
+     * io_context
+     */
+    std::shared_ptr<boost::asio::io_context> context_server_;
+
+    /**
      * Acceptor
      */
-    std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
+    std::shared_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
 
     /**
      * Vector with multiple connections
@@ -32,15 +37,23 @@ private:
 
 public:
     /**
-     * Prepare available connections.
-     * @param io_context
-     */
-    explicit Server(boost::asio::io_context &io_context);
-
-    /**
      * Prepare listeners.
      */
-    void run();
+    static void run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
+
+private:
+    /**
+     * Prepare available connections.
+     * @param io_contexts
+     */
+    explicit Server(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
+
+    /**
+     * Singleton
+     * @param io_contexts
+     * @return
+     */
+    static Server* getInstance(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
 };
 
 
