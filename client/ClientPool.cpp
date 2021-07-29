@@ -15,114 +15,109 @@ ClientPool* ClientPool::getInstance(){
     return &clientPool;
 }
 
-void ClientPool::add(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts, const std::string &dns_address, uint16_t port) {
+void ClientPool::add(const std::string &dns_address, uint16_t port) {
+    ClientPool* clientPool = getInstance();
+
     // Name resolution
     std::vector<boost::asio::ip::address_v6> v6_addresses = Resolver::getAddresses(dns_address);
 
-    // Generate io_context according to the number of connections
     for(const auto& v6_address : v6_addresses){
-        std::shared_ptr<boost::asio::io_context> io_context = std::make_shared<boost::asio::io_context>();
-        add(*io_context, v6_address, port);
-        io_contexts.push_back(io_context);
+        if(clientPool->connection_pool_.find(v6_address.to_string()) != clientPool->connection_pool_.end()){
+            continue;
+        }
+        clientPool->_addUPool(v6_address.to_string(), port);
     }
 }
 
 void ClientPool::add(boost::asio::io_context &io_context, const std::vector<NetAddr> &endpoint_list) {
-    for(auto endpoint : endpoint_list){
-        add(io_context, endpoint.getAddressV6(), endpoint.getPort());
-    }
-}
-
-void ClientPool::add(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port){
     ClientPool* clientPool = getInstance();
-    // Check if node is already connected
-    if(clientPool->connection_pool_.find(address.to_string()) != clientPool->connection_pool_.end()){
-        return;
-    }
-
-    // Check maximum number of connections
-    if(isMaxConnection()){
-        auto result = clientPool->unused_pool_.insert(std::make_pair( address.to_string(), port));
-        return;
-    }
-
-    // Add connection
-    auto result = clientPool->connection_pool_.insert(std::make_pair(address.to_string(), Client(io_context, address, port)));
-
-    // Run current connection
-    if(result.second) {
-        clientPool->_run(address.to_string());
+    for(auto endpoint : endpoint_list){
+        if(clientPool->connection_pool_.find(endpoint.getAddressString()) != clientPool->connection_pool_.end()){
+            continue;
+        }
+        clientPool->_addUPool(endpoint.getAddressV6().to_string(), endpoint.getPort());
     }
 }
 
-void ClientPool::_run(const std::string &address){
-    connection_pool_.at(address).run();
+void ClientPool::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts){
+    ClientPool* clientPool = getInstance();
+
+    for(int t = 0 ; t < number_of_thread_ ; ++t){
+        std::shared_ptr<boost::asio::io_context> io_context = std::make_shared<boost::asio::io_context>();
+        clientPool->_pullUp(*io_context);
+        io_contexts.push_back(io_context);
+
+        if(clientPool->unused_pool_.empty()){
+            break;
+        }
+    }
 }
 
 void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
     ClientPool* clientPool = getInstance();
+
     // If it is locked in another thread, wait the specified time and check again.
-    while(true) {
-        if (!clientPool->lock_) {
-            clientPool->lock_ = true;
-            break;
-        }
-        sleep(1);
-        clientPool = getInstance();
-    }
+    clientPool->_lock();
 
     // Remove from connected list
-    auto itd = clientPool->connection_pool_.find(address.to_string());
-    clientPool->connection_pool_.erase(itd);
+    clientPool->_removeCPool(address);
 
     // If empty from unused list, wait for another thread to get it.
+    clientPool->_emptyPoolBlock();
+
+    // Add From connected pool, Delete From unused pool.
+    clientPool->_pullUp(io_context);
+
+    // unlock
+    clientPool->_unlock();
+}
+
+void ClientPool::_addUPool(const std::string &address, uint16_t port){
+    unused_pool_.insert(std::make_pair( address, port));
+}
+
+void ClientPool::_addCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port){
+    connection_pool_.insert(std::make_pair(address.to_string(), Client(io_context, address, port)));
+    connection_pool_.at(address.to_string()).run();
+}
+
+void ClientPool::_pullUp(boost::asio::io_context &io_context){
+    auto itb = unused_pool_.begin();
+
+    boost::asio::ip::address_v6 v6_address = boost::asio::ip::make_address_v6(itb->first);
+    _addCPool(io_context, v6_address, itb->second);
+
+    unused_pool_.erase(itb);
+}
+
+void ClientPool::_removeCPool(const boost::asio::ip::address_v6 &address){
+    auto itd = connection_pool_.find(address.to_string());
+    connection_pool_.erase(itd);
+}
+
+void ClientPool::_emptyPoolBlock(){
     while(true){
-        if(!clientPool->unused_pool_.empty()){
+        if(!unused_pool_.empty()){
             break;
         }
         sleep(1);
     }
-
-    auto itb = clientPool->unused_pool_.begin();
-    boost::asio::ip::address_v6 v6_address = boost::asio::ip::make_address_v6(itb->first);
-    add(io_context, v6_address, itb->second);
-    clientPool->unused_pool_.erase(itb);
-
-    clientPool->lock_ = false;
 }
 
-void ClientPool::resize(boost::asio::io_context &io_context){
-    ClientPool* clientPool = getInstance();
-
-    // Removes a closed client from the connection pool.
-    auto itd = clientPool->connection_pool_.begin();
-    while (itd != clientPool->connection_pool_.end()) {
-        if (!itd->second.isOpen()) {
-            clientPool->connection_pool_.erase(itd++);
-        } else ++itd;
-    }
-
-    // Promotes an unused connection pool to a connected pool.
-    auto ita = clientPool->unused_pool_.begin();
-    while(ita != clientPool->unused_pool_.end()){
-        if(isMaxConnection()){
-            return;
+void ClientPool::_lock(){
+    while(true) {
+        if (!lock_) {
+            lock_ = true;
+            break;
         }
-        boost::asio::ip::address_v6 v6_address = boost::asio::ip::make_address_v6(ita->first);
-        add(io_context, v6_address, ita->second);
-        clientPool->unused_pool_.erase(ita++);
+        sleep(1);
     }
+}
+
+void ClientPool::_unlock(){
+    lock_ = false;
 }
 
 std::map<std::string, Client> ClientPool::getConnectionList(){
     return getInstance()->connection_pool_;
-}
-
-bool ClientPool::isMaxConnection(){
-    ClientPool* clientPool = getInstance();
-
-    if(clientPool->connection_pool_.size() >= 10){
-        return true;
-    }
-    return false;
 }

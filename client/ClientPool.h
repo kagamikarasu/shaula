@@ -33,6 +33,11 @@ private:
     std::unordered_map<std::string, std::uint16_t> unused_pool_;
 
     /**
+     * Number of threads to use
+     */
+    const static uint8_t number_of_thread_ = 15;
+
+    /**
      * pool locker
      */
     bool lock_ = false;
@@ -52,11 +57,10 @@ public:
     /**
      * Add Connection From Domain
      * Ex. Use DNS Server
-     * @param io_context
      * @param dns_address
      * @param port
      */
-    static void add(std::vector<std::shared_ptr<boost::asio::io_context>> &io_context, const std::string &dns_address, uint16_t port);
+    static void add(const std::string &dns_address, uint16_t port);
 
     /**
      * Add Connection From NetAddrVector
@@ -67,28 +71,10 @@ public:
     static void add(boost::asio::io_context &io_context, const std::vector<NetAddr> &endpoint_list);
 
     /**
-     * Add a connection from an ipv6 address
-     * If the number of connections exceeds the limit,
-     * it is added to the unused pool. If the number is not exceeded, add the connection to the connection pool.
-     * @param io_context
-     * @param address
-     * @param port
+     * Retrieve addresses from the unconnected pool and store them in the thread pool.
+     * @param io_contexts
      */
-    static void add(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port);
-
-    /**
-     * Check MaxConnection
-     * @return
-     */
-    static bool isMaxConnection();
-
-    /**
-     * When ConnectionPoolElement is closed,
-     * delete it and retrieve it from unusedList to make a connection.
-     * @param io_context
-     */
-    [[deprecated("Please use pullUp()")]]
-    static void resize(boost::asio::io_context &io_context);
+    static void run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
 
     /**
      * Removes the specified address from the pool.
@@ -105,11 +91,49 @@ public:
     static std::map<std::string, Client> getConnectionList();
 
 private:
+
     /**
-     * Run ConnectionPoolElement
+     * Add to connected pool.
+     * @param io_context
+     * @param address
+     * @param port
+     */
+    void _addCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port);
+
+    /**
+     * Add to unconnected pool.
+     * @param address
+     * @param port
+     */
+    void _addUPool(const std::string &address, uint16_t port);
+
+    /**
+     * Remove from the unconnected pool and put into the connected pool
+     * @param io_context
+     */
+    void _pullUp(boost::asio::io_context &io_context);
+
+    /**
+     * Remove from connected pool.
      * @param address
      */
-    void _run(const std::string &address);
+    void _removeCPool(const boost::asio::ip::address_v6 &address);
+
+    /**
+     * Block until unconnected list is accumulated.
+     */
+    void _emptyPoolBlock();
+
+    /**
+     * Lock pool operations to prevent conflicts.
+     * Blocked until other threads are completed.
+     */
+    void _lock();
+
+    /**
+     * Unlock
+     */
+    void _unlock();
 
 };
 
