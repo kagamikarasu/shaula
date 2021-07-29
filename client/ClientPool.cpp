@@ -27,7 +27,7 @@ void ClientPool::add(std::vector<std::shared_ptr<boost::asio::io_context>> &io_c
     }
 }
 
-void ClientPool::add(boost::asio::io_context &io_context, std::vector<NetAddr> endpoint_list) {
+void ClientPool::add(boost::asio::io_context &io_context, const std::vector<NetAddr> &endpoint_list) {
     for(auto endpoint : endpoint_list){
         add(io_context, endpoint.getAddressV6(), endpoint.getPort());
     }
@@ -51,13 +51,44 @@ void ClientPool::add(boost::asio::io_context &io_context, const boost::asio::ip:
 
     // Run current connection
     if(result.second) {
-        _run(address.to_string());
+        clientPool->_run(address.to_string());
     }
 }
 
 void ClientPool::_run(const std::string &address){
+    connection_pool_.at(address).run();
+}
+
+void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
     ClientPool* clientPool = getInstance();
-    clientPool->connection_pool_.at(address).run();
+    // If it is locked in another thread, wait the specified time and check again.
+    while(true) {
+        if (!clientPool->lock_) {
+            clientPool->lock_ = true;
+            break;
+        }
+        sleep(1);
+        clientPool = getInstance();
+    }
+
+    // Remove from connected list
+    auto itd = clientPool->connection_pool_.find(address.to_string());
+    clientPool->connection_pool_.erase(itd);
+
+    // If empty from unused list, wait for another thread to get it.
+    while(true){
+        if(!clientPool->unused_pool_.empty()){
+            break;
+        }
+        sleep(1);
+    }
+
+    auto itb = clientPool->unused_pool_.begin();
+    boost::asio::ip::address_v6 v6_address = boost::asio::ip::make_address_v6(itb->first);
+    add(io_context, v6_address, itb->second);
+    clientPool->unused_pool_.erase(itb);
+
+    clientPool->lock_ = false;
 }
 
 void ClientPool::resize(boost::asio::io_context &io_context){
@@ -81,6 +112,10 @@ void ClientPool::resize(boost::asio::io_context &io_context){
         add(io_context, v6_address, ita->second);
         clientPool->unused_pool_.erase(ita++);
     }
+}
+
+std::map<std::string, Client> ClientPool::getConnectionList(){
+    return getInstance()->connection_pool_;
 }
 
 bool ClientPool::isMaxConnection(){

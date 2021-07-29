@@ -20,7 +20,7 @@ Ping::Ping(const std::vector<unsigned char> &bytes) {
 }
 
 void Ping::setNonce() {
-    nonce_ = Crypt::getRand(8);
+    nonce_ = Crypt::getRandNonce(8);
 }
 
 void Ping::setNonce(const std::vector<unsigned char> &bytes) {

@@ -79,6 +79,9 @@ class Version : public Message {
     bool relay_{};
 
 public:
+
+    Version() = default;
+
     /**
      * Create a constructor for request creation.
      * The IP/Port is stored in the argument Endpoint, and NetAddr is created using this.
@@ -97,6 +100,12 @@ public:
      * @return
      */
     std::vector<unsigned char> getMessage() override;
+
+    /**
+     * Return string UserAgent
+     * @return
+     */
+    std::string getUserAgent();
 
 private:
     /**

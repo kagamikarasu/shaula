@@ -57,6 +57,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
     // Receive
     try {
         header = getHeader(yield);
+        last_message_header_ = std::make_shared<Header>(*header);
         body = getBody(yield, *header);
     }catch(std::exception& e){
         _close();
@@ -65,7 +66,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
 
     // version
     if(header->isVersion()){
-        std::unique_ptr<Version> version = std::make_unique<Version>(body);
+        version_ = std::make_shared<Version>(body);
     }
 
     // verack
@@ -79,7 +80,6 @@ void Client::_receive(const boost::asio::yield_context& yield){
         std::unique_ptr<Addr> addr = std::make_unique<Addr>(body);
         std::vector<NetAddr> addr_list = addr->getAddrList();
         ClientPool::add(io_context_, addr_list);
-        addr->showAddrList();
     }
 
     // ping
@@ -88,19 +88,6 @@ void Client::_receive(const boost::asio::yield_context& yield){
         sendPong(yield, ping->getNonce());
     }
 
-    auto message = new Message(*header, body);
-
-    std::ostringstream oss;
-    oss << boost::this_thread::get_id();
-    printf("(%s) - Client Receive Message:", oss.str().c_str());
-
-    for(const unsigned char value : message->getMessage()) {
-        printf(" %02x", value);
-    }
-    std::cout << std::endl;
-
-    delete message;
-
     _receive(yield);
 }
 
@@ -108,7 +95,21 @@ bool Client::isOpen(){
     return socket_->is_open();
 }
 
+std::shared_ptr<Version> Client::getVersion(){
+    if(!version_){
+        return std::make_shared<Version>();
+    }
+    return version_;
+}
+
+std::shared_ptr<Header> Client::getLastReceiveHeader(){
+    if(!last_message_header_){
+        return std::make_shared<Header>();
+    }
+    return last_message_header_;
+}
+
 void Client::_close(){
     socket_->close();
-    ClientPool::resize(io_context_);
+    ClientPool::pullUp(io_context_, address_);
 }

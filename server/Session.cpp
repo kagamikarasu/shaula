@@ -48,6 +48,7 @@ void Session::receive(const boost::asio::yield_context &yield){
 
     // getaddr
     if(header->isGetAddr()){
+        sleep(10);
         close();
         return;
     }

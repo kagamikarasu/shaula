@@ -84,7 +84,7 @@ public:
      * @param size
      * @return
      */
-    static std::vector<unsigned char> getRand(uint16_t size);
+    static std::vector<unsigned char> getRandNonce(uint16_t size);
 };
 
 #endif //SHAULA_CRYPT_H

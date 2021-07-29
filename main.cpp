@@ -11,6 +11,7 @@
 #include <server/Server.h>
 #include <client/ClientPool.h>
 #include <boost/thread.hpp>
+#include <display/Display.h>
 
 int main() {
     boost::thread_group threadGroup;
@@ -23,6 +24,7 @@ int main() {
     //ClientPool::add(io_contexts, "testnet-seed.bitcoin.jonasschnelli.ch", 18333);
     ClientPool::add(io_contexts, "host.docker.internal", 18333);
 
+    Display::show(io_contexts);
 
     for(const std::shared_ptr<boost::asio::io_context>& io_context_client : io_contexts){
         threadGroup.create_thread([io_context_client] { io_context_client->run(); });

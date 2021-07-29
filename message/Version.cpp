@@ -10,14 +10,13 @@
 
 #include "Version.h"
 
-
 Version::Version(const Endpoint &endpoint) {
     setVersion(versionMeta.PROTOCOL_VERSION_NUMBER);
     setService(versionMeta.SERVICE);
     setTimestamp();
     setAddrRecv(endpoint);
     setAddrFrom(endpoint);
-    setNonce(Crypt::getRand(8));
+    setNonce(Crypt::getRandNonce(8));
     setUserAgent(versionMeta.USER_AGENT);
     setBlockStart(0);
     setRelay(true);
@@ -143,4 +142,8 @@ std::vector<unsigned char> Version::getMessage(){
     setPayload();
     // Merge Parent Message
     return Message::getMessage();
+}
+
+std::string Version::getUserAgent(){
+    return user_agent_.getBodyString();
 }

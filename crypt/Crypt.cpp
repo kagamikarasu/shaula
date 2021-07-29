@@ -98,7 +98,7 @@ std::vector<unsigned char> Crypt::toHexFromHexStr(const std::string &hex_bin) {
     return bytes;
 }
 
-std::vector<unsigned char> Crypt::getRand(uint16_t size){
+std::vector<unsigned char> Crypt::getRandNonce(uint16_t size){
     unsigned char nonce[size];
     RAND_bytes(nonce, size);
     return { nonce, nonce + size };

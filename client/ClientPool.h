@@ -13,6 +13,7 @@
 
 #include "Resolver.h"
 #include "Client.h"
+#include <unordered_map>
 
 /**
  * Singleton class for connection management
@@ -29,10 +30,15 @@ private:
     /**
      * List of unconnected
      */
-    std::map<std::string, std::uint16_t> unused_pool_;
+    std::unordered_map<std::string, std::uint16_t> unused_pool_;
 
     /**
-     * Constructor
+     * pool locker
+     */
+    bool lock_ = false;
+
+    /**
+     * Singleton
      */
     ClientPool()= default;
 
@@ -58,7 +64,7 @@ public:
      * @param io_context
      * @param endpoint_list
      */
-    static void add(boost::asio::io_context &io_context, std::vector<NetAddr> endpoint_list);
+    static void add(boost::asio::io_context &io_context, const std::vector<NetAddr> &endpoint_list);
 
     /**
      * Add a connection from an ipv6 address
@@ -81,14 +87,30 @@ public:
      * delete it and retrieve it from unusedList to make a connection.
      * @param io_context
      */
+    [[deprecated("Please use pullUp()")]]
     static void resize(boost::asio::io_context &io_context);
+
+    /**
+     * Removes the specified address from the pool.
+     * Then, use io_context to start a connection from the unused pool.
+     * @param io_context
+     * @param address
+     */
+    static void pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
+
+    /**
+     * Return the list of currently connected clients.
+     * @return
+     */
+    static std::map<std::string, Client> getConnectionList();
 
 private:
     /**
      * Run ConnectionPoolElement
      * @param address
      */
-    static void _run(const std::string &address);
+    void _run(const std::string &address);
+
 };
 
 

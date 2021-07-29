@@ -18,10 +18,25 @@
  *
  */
 class Client : public Node {
+    /**
+     * Address being connected
+     */
     boost::asio::ip::address_v6 address_;
+
+    /**
+     * Port being connected
+     */
     uint16_t port_;
-    uint32_t protocol_version_{};
-    uint32_t service_{};
+
+    /**
+     * Last received version message
+     */
+    std::shared_ptr<Version> version_;
+
+    /**
+     * Last received header
+     */
+    std::shared_ptr<Header> last_message_header_;
 public:
     /**
      * Constructor.
@@ -43,6 +58,20 @@ public:
      * @return
      */
     bool isOpen();
+
+    /**
+     * Returns the last received Version message.
+     * If this function is read before receiving, a temporary value is returned.
+     * @return
+     */
+    std::shared_ptr<Version> getVersion();
+
+    /**
+     * Returns the last received Header.
+     * If this function is read before receiving, a temporary value is returned.
+     * @return
+     */
+    std::shared_ptr<Header> getLastReceiveHeader();
 
 private:
     /**
