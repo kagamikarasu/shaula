@@ -39,7 +39,6 @@ class VarInt {
      */
     uint64_t length_{};
 
-
 public:
 
     explicit VarInt() = default;
@@ -69,10 +68,16 @@ public:
     uint8_t getPosition();
 
     /**
-     * Get Payload Length.
+     * Get Body Length.
      * @return
      */
-    uint64_t getLength();
+    uint64_t getBodyLength();
+
+    /**
+     * Get Payload Length
+     * @return
+     */
+    uint64_t getPayloadLength();
 
 private:
     /**

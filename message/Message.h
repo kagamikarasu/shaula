@@ -62,6 +62,8 @@ public:
      */
     virtual std::vector<unsigned char> getMessage();
 
+    std::vector<unsigned char> getBodyHeadBytes();
+
 private:
     /**
      * Set Header
@@ -93,6 +95,7 @@ protected:
      * @param bytes
      */
     void setPayload(const std::vector<unsigned char> &bytes);
+
 };
 
 

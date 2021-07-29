@@ -41,17 +41,32 @@ void Display::_show(){
 }
 
 void Display::_header(){
-    addstr("Address\n");
+    addstr("Thread\t\t");
+    addstr("Address\t\t\t");
+    addstr("UserAgent\t\t\t");
+    addstr("Block\t\t");
+    addstr("RecvHeader\t");
+    addstr("RecvHeadBody\n");
 }
 
 void Display::_clientConnectionList(){
     std::map<std::string, Client> c = ClientPool::getConnectionList();
     for(auto v : c){
+        addstr(v.second.getRunThreadId().c_str());
+        addstr("\t");
         addstr(v.first.c_str());
-        addstr(" - ");
-        addstr(v.second.getVersion()->getUserAgent().c_str());
-        addstr(" - ");
-        addstr(v.second.getLastReceiveHeader()->getCommand().c_str());
+        addstr("\t");
+
+        if(!v.second.getLastReceiveBodyHead().empty()) {
+            addstr(v.second.getVersion()->getUserAgent().c_str());
+            addstr("\t\t");
+            addstr(v.second.getVersion()->getBlockHeight().c_str());
+            addstr("\t\t");
+            addstr(v.second.getLastReceiveHeader()->getCommand().c_str());
+            addstr("\t\t");
+            addstr(v.second.getLastReceiveBodyHead().c_str());
+        }
+
         addstr("\n");
     }
 }

@@ -59,3 +59,10 @@ std::vector<unsigned char> Message::getMessage() {
 
     return message;
 }
+
+std::vector<unsigned char> Message::getBodyHeadBytes(){
+    if(payload_.size() >= 40){
+        return {&payload_[0], &payload_[40]};
+    }
+    return payload_;
+}

@@ -58,8 +58,12 @@ void VarInt::setLength(const std::vector<unsigned char> &bytes){
     setPosition(1);
 }
 
-uint64_t VarInt::getLength() {
+uint64_t VarInt::getBodyLength() {
     return length_;
+}
+
+uint64_t VarInt::getPayloadLength(){
+    return length_ + getPosition();
 }
 
 uint8_t VarInt::getPosition() {

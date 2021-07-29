@@ -25,16 +25,23 @@ Version::Version(const Endpoint &endpoint) {
 }
 
 Version::Version(const std::vector<unsigned char> &bytes) {
-    setVersion({&bytes[0], &bytes[4]});
-    setService({&bytes[4], &bytes[12]});
-    setTimestamp({&bytes[12], &bytes[20]});
-    setAddrRecv({&bytes[20], &bytes[46]});
-    setAddrFrom({&bytes[46], &bytes[72]});
-    setNonce({&bytes[72], &bytes[80]});
+    uint32_t sp = 0;
+    setVersion({&bytes[sp], &bytes[sp+=4]});
+    setService({&bytes[sp], &bytes[sp+=8]});
+    setTimestamp({&bytes[sp], &bytes[sp+=8]});
+    setAddrRecv({&bytes[sp], &bytes[sp+=26]});
+    setAddrFrom({&bytes[sp], &bytes[sp+=26]});
+    setNonce({&bytes[sp], &bytes[sp+=8]});
     // explicitly
-    setUserAgent(std::vector<unsigned char>({&bytes[80], &bytes[bytes.size()]}));
+    setUserAgent(std::vector<unsigned char>({&bytes[sp], &bytes[bytes.size()]}));
 
-    return;
+    // Add the payload of the UserAgent
+    sp += user_agent_.getPayloadLength();
+
+    setBlockStart(std::vector<unsigned char>({&bytes[sp], &bytes[sp+=4]}));
+
+    // Relay is a 1-byte file, so it's the same.
+    setRelay(bytes[sp]);
 }
 
 void Version::setVersion(uint32_t version){
@@ -103,6 +110,10 @@ void Version::setBlockStart(uint32_t start_height){
     start_height_ = start_height;
 }
 
+void Version::setBlockStart(const std::vector<unsigned char> &bytes) {
+    start_height_ = Decode::toByteInt(bytes);
+}
+
 void Version::setRelay(bool relay) {
     relay_ = relay;
 }
@@ -146,4 +157,8 @@ std::vector<unsigned char> Version::getMessage(){
 
 std::string Version::getUserAgent(){
     return user_agent_.getBodyString();
+}
+
+std::string Version::getBlockHeight(){
+    return std::to_string(start_height_);
 }

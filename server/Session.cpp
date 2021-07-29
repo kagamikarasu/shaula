@@ -59,20 +59,6 @@ void Session::receive(const boost::asio::yield_context &yield){
         return;
     }
 
-    auto message = new Message(*header, body);
-
-    std::ostringstream oss;
-    oss << boost::this_thread::get_id();
-    printf("(%s) - Server Receive Message:", oss.str().c_str());
-
-    for(const unsigned char value : message->getMessage()) {
-        printf(" %02x", value);
-    }
-
-    std::cout << std::endl;
-
-    delete message;
-
     receive(yield);
 }
 

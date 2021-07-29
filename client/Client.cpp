@@ -25,6 +25,7 @@ void Client::run(){
 void Client::_run(const boost::asio::yield_context &yield){
     if(!socket_->is_open()){
         try {
+            _set_run_thread_id();
             _connect(yield);
         }catch (std::exception& e){
             _close();
@@ -57,7 +58,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
     // Receive
     try {
         header = getHeader(yield);
-        last_message_header_ = std::make_shared<Header>(*header);
+        last_receive_header_ = std::make_shared<Header>(*header);
         body = getBody(yield, *header);
     }catch(std::exception& e){
         _close();
@@ -88,11 +89,19 @@ void Client::_receive(const boost::asio::yield_context& yield){
         sendPong(yield, ping->getNonce());
     }
 
+    // Store the first byte for browsing.
+    std::unique_ptr body_ptr = std::make_unique<Message>(*header, body);
+    last_receive_body_head_ = body_ptr->getBodyHeadBytes();
+
     _receive(yield);
 }
 
 bool Client::isOpen(){
     return socket_->is_open();
+}
+
+std::string Client::getRunThreadId(){
+    return run_thread_id_;
 }
 
 std::shared_ptr<Version> Client::getVersion(){
@@ -103,10 +112,24 @@ std::shared_ptr<Version> Client::getVersion(){
 }
 
 std::shared_ptr<Header> Client::getLastReceiveHeader(){
-    if(!last_message_header_){
+    if(!last_receive_header_){
         return std::make_shared<Header>();
     }
-    return last_message_header_;
+    return last_receive_header_;
+}
+
+std::string Client::getLastReceiveBodyHead() {
+    std::ostringstream body_head_stream;
+    for (auto v : last_receive_body_head_) {
+        body_head_stream << std::hex << std::setfill('0') << std::setw(2) << std::uppercase << (int)v;
+    }
+    return body_head_stream.str();
+}
+
+void Client::_set_run_thread_id(){
+    std::ostringstream thread_id_stream;
+    thread_id_stream << boost::this_thread::get_id();
+    run_thread_id_ = thread_id_stream.str();
 }
 
 void Client::_close(){

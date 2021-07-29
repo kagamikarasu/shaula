@@ -57,6 +57,21 @@ public:
     std::string getBodyString();
 
     /**
+     * Returns the number of character bytes.
+     * VarInt values are not included.
+     * Equivalent to VarInt::getBodyLength.
+     * @return
+     */
+    uint64_t getBodyLength();
+
+    /**
+     * Returns the total length containing the VarInt values.
+     * Equivalent to VarInt::getPayloadLength.
+     * @return
+     */
+    uint64_t getPayloadLength();
+
+    /**
      * Get the Payload.
      * Contains a VarInt.
      * @return

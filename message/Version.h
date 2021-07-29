@@ -107,6 +107,12 @@ public:
      */
     std::string getUserAgent();
 
+    /**
+     * Return string BlockHeight
+     * @return
+     */
+    std::string getBlockHeight();
+
 private:
     /**
      * Set Version Number From Int
@@ -193,6 +199,12 @@ private:
     void setBlockStart(uint32_t);
 
     /**
+     * Set BlockStart From bytes.
+     * @param bytes
+     */
+    void setBlockStart(const std::vector<unsigned char> &bytes);
+
+    /**
      * Set Relay
      */
     void setRelay(bool);
@@ -201,6 +213,7 @@ private:
      * Set Payload
      */
     void setPayload();
+
 };
 
 

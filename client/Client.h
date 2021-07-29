@@ -19,6 +19,11 @@
  */
 class Client : public Node {
     /**
+     * Run Thread ID
+     */
+    std::string run_thread_id_;
+
+    /**
      * Address being connected
      */
     boost::asio::ip::address_v6 address_;
@@ -36,7 +41,13 @@ class Client : public Node {
     /**
      * Last received header
      */
-    std::shared_ptr<Header> last_message_header_;
+    std::shared_ptr<Header> last_receive_header_;
+
+    /**
+     * Last received body head body
+     */
+    std::vector<unsigned char> last_receive_body_head_;
+
 public:
     /**
      * Constructor.
@@ -60,6 +71,12 @@ public:
     bool isOpen();
 
     /**
+     * Returns the thread ID in which this client is currently running.
+     * @return
+     */
+    std::string getRunThreadId();
+
+    /**
      * Returns the last received Version message.
      * If this function is read before receiving, a temporary value is returned.
      * @return
@@ -72,6 +89,14 @@ public:
      * @return
      */
     std::shared_ptr<Header> getLastReceiveHeader();
+
+
+    /**
+     * Get the first few bytes of the Body.
+     * Uppercase
+     * @return
+     */
+    std::string getLastReceiveBodyHead();
 
 private:
     /**
@@ -95,11 +120,17 @@ private:
     void _receive(const boost::asio::yield_context &yield);
 
     /**
+     * Set Run Thread ID
+     */
+    void _set_run_thread_id();
+
+    /**
      * Disconnects the connection and removes itself from the connection pool.
      * At the same time, it starts a new connection.
      * See ClientPool.h for more details.
      */
     void _close();
+
 };
 
 #endif //SHAULA_CLIENT_H

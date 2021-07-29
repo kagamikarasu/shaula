@@ -10,7 +10,7 @@
 #include "VarStr.h"
 
 VarStr::VarStr(const std::vector<unsigned char> &bytes) : var_int_(bytes) {
-    body_ = {&bytes[var_int_.getPosition()], &bytes[var_int_.getPosition() + var_int_.getLength()]};
+    body_ = {&bytes[var_int_.getPosition()], &bytes[var_int_.getPayloadLength()]};
 }
 
 VarStr::VarStr(const std::string &str) : var_int_(str) {
@@ -25,10 +25,18 @@ std::string VarStr::getBodyString(){
     return std::string(body_.begin(), body_.end());
 }
 
+uint64_t VarStr::getBodyLength() {
+    return var_int_.getBodyLength();
+}
+
+uint64_t VarStr::getPayloadLength() {
+    return var_int_.getPayloadLength();
+}
+
 std::vector<unsigned char> VarStr::getPayload(){
     std::vector<unsigned char> result;
 
-    result.push_back(var_int_.getLength());
+    result.push_back(var_int_.getBodyLength());
     result.insert(result.end(), body_.begin(), body_.end());
 
     return result;
