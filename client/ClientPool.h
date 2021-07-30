@@ -22,6 +22,12 @@
  */
 class ClientPool {
 private:
+
+    /**
+     * Manage the number of clients per thread
+     */
+    std::map<boost::asio::io_context*, uint8_t> thread_connection_manager_;
+
     /**
      * List of connections in progress
      */
@@ -35,7 +41,12 @@ private:
     /**
      * Number of threads to use
      */
-    const static uint8_t number_of_thread_ = 15;
+    const static uint8_t number_of_thread_ = 4;
+
+    /**
+     * Client Per Thread
+     */
+    const static uint8_t client_per_thread = 8;
 
     /**
      * pool locker
@@ -117,7 +128,7 @@ private:
      * Remove from connected pool.
      * @param address
      */
-    void _removeCPool(const boost::asio::ip::address_v6 &address);
+    void _removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
 
     /**
      * Block until unconnected list is accumulated.
