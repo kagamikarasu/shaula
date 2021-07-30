@@ -58,12 +58,16 @@ class Display {
      * Display the connected list
      */
     static void _clientConnectionList();
+
+    static std::string _getFillString(const std::string &str, uint8_t max_size);
 public:
     /**
      * drawing function
      * @param io_contexts
      */
     static void show(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
+
+    static std::string _mask(const std::string &str, uint8_t sp);
 };
 
 
