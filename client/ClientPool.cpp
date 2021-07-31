@@ -59,7 +59,7 @@ void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::
     ClientPool* clientPool = getInstance();
 
     // If it is locked in another thread, wait the specified time and check again.
-    clientPool->_lock();
+    std::lock_guard<std::mutex> lock(clientPool->locker_);
 
     // Remove from connected list
     clientPool->_removeCPool(io_context, address);
@@ -69,9 +69,6 @@ void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::
 
     // Add From connected pool, Delete From unused pool.
     clientPool->_pullUp(io_context);
-
-    // unlock
-    clientPool->_unlock();
 }
 
 void ClientPool::_addUPool(const std::string &address, uint16_t port){
@@ -121,20 +118,6 @@ void ClientPool::_emptyPoolBlock(){
         }
         sleep(1);
     }
-}
-
-void ClientPool::_lock(){
-    while(true) {
-        if (!lock_) {
-            lock_ = true;
-            break;
-        }
-        sleep(1);
-    }
-}
-
-void ClientPool::_unlock(){
-    lock_ = false;
 }
 
 std::map<std::string, Client> ClientPool::getConnectionList(){

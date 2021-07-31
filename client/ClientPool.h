@@ -51,7 +51,7 @@ private:
     /**
      * pool locker
      */
-    bool lock_ = false;
+    std::mutex locker_;
 
     /**
      * Singleton
@@ -134,17 +134,6 @@ private:
      * Block until unconnected list is accumulated.
      */
     void _emptyPoolBlock();
-
-    /**
-     * Lock pool operations to prevent conflicts.
-     * Blocked until other threads are completed.
-     */
-    void _lock();
-
-    /**
-     * Unlock
-     */
-    void _unlock();
 
 };
 
