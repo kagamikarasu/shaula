@@ -9,6 +9,7 @@
 //
 
 #include <client/ClientPool.h>
+#include <server/Server.h>
 #include "Display.h"
 
 Display::Display(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts){
@@ -33,14 +34,24 @@ void Display::_init(){
 
 void Display::_show(){
     _clear();
-    _header();
+
+    addstr("Client Connection.\n");
+    _clientHeader();
     _clientConnectionList();
+
+    addstr("\n");
+
+    /*
+    addstr("Server Connection List.\n");
+    _serverHeader();
+    _serverConnectionList();
+    */
 
     usleep(500000);
     _show();
 }
 
-void Display::_header(){
+void Display::_clientHeader(){
     addstr("Thread\t\t");
     addstr("Address\t\t\t");
     addstr("UserAgent\t\t");
@@ -53,7 +64,7 @@ void Display::_clientConnectionList(){
     std::map<std::string, Client> c = ClientPool::getConnectionList();
     for(auto v : c){
         addstr(_getFillString(v.second.getRunThreadId(), 16).c_str());
-        addstr(_getFillString(_mask(v.first,12), 24).c_str());
+        addstr(_getFillString(v.first, 24).c_str());
 
         if(!v.second.getLastReceiveBodyHead().empty()) {
             addstr(_getFillString(v.second.getVersion()->getUserAgent(), 24).c_str());
@@ -61,6 +72,20 @@ void Display::_clientConnectionList(){
             addstr(_getFillString(v.second.getLastReceiveHeader()->getCommand(), 16).c_str());
             addstr(v.second.getLastReceiveBodyHead().c_str());
         }
+        addstr("\n");
+    }
+}
+
+void Display::_serverHeader(){
+    addstr("Thread\t\t");
+    addstr("Address\n");
+}
+
+void Display::_serverConnectionList(){
+    std::vector<Session> s = Server::getConnectionList();
+    for(auto v : s){
+        addstr(_getFillString(v.getRunThreadId(), 16).c_str());
+        addstr(_getFillString(v.getAddress(), 24).c_str());
         addstr("\n");
     }
 }

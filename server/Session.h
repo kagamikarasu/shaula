@@ -19,7 +19,20 @@
  * Basically the same as the Client Class.
  */
 class Session : public Node{
-        boost::asio::ip::tcp::acceptor &acceptor_;
+    /**
+     * Run Thread ID
+     */
+    std::string run_thread_id_;
+
+    /**
+     * Acceptor
+     */
+    boost::asio::ip::tcp::acceptor &acceptor_;
+
+    /**
+     * Last received version message
+     */
+    std::shared_ptr<Version> version_;
 public:
     /**
      *
@@ -35,9 +48,32 @@ public:
     void run();
 
     /**
+     * Return Version Message
+     * @return
+     */
+    std::shared_ptr<Version> getVersion();
+
+    /**
      * Close the current connection and accept a new one.
      */
     void close();
+
+    /**
+     * Check Connection
+     * @return
+     */
+    bool isOpen();
+
+    /**
+     * Return Remote Address
+     */
+    std::string getAddress();
+
+    /**
+     * Return ThreadId
+     * @return
+     */
+    std::string getRunThreadId();
 
 private:
     /**
@@ -51,6 +87,9 @@ private:
      * @param yield
      */
     void receive(const boost::asio::yield_context &yield);
+
+    void _set_run_thread_id();
+
 };
 
 

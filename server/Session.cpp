@@ -21,6 +21,8 @@ void Session::run(){
 }
 
 void Session::accept(const boost::asio::yield_context &yield){
+    _set_run_thread_id();
+
     acceptor_.async_accept(*socket_, yield);
     setAddr();
     receive(yield);
@@ -41,6 +43,7 @@ void Session::receive(const boost::asio::yield_context &yield){
 
     // version
     if(header->isVersion()){
+        version_ = std::make_shared<Version>(body);
         sendVersion(yield);
         sendVerack(yield);
         sendPing(yield);
@@ -60,6 +63,31 @@ void Session::receive(const boost::asio::yield_context &yield){
     }
 
     receive(yield);
+}
+
+std::string Session::getAddress(){
+    return endpoint_.remote_address.to_string();
+}
+
+std::shared_ptr<Version> Session::getVersion(){
+    if(!version_){
+        return std::make_shared<Version>();
+    }
+    return version_;
+}
+
+std::string Session::getRunThreadId(){
+    return run_thread_id_;
+}
+
+void Session::_set_run_thread_id(){
+    std::ostringstream thread_id_stream;
+    thread_id_stream << boost::this_thread::get_id();
+    run_thread_id_ = thread_id_stream.str();
+}
+
+bool Session::isOpen(){
+    return socket_->is_open();
 }
 
 void Session::close(){

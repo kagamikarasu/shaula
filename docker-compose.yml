@@ -10,7 +10,7 @@ services:
       - ./:/shaula
     ports:
       - "22:22"
-      - "8080:80"
+      - "8333:8333"
       - "18333:18333"
     cap_add:
       - SYS_PTRACE

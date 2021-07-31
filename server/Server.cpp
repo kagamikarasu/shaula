@@ -10,7 +10,7 @@
 
 #include "Server.h"
 
-Server::Server(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts) {
+Server::Server() {
     context_server_ = std::make_shared<boost::asio::io_context>();
     acceptor_ = std::make_unique<boost::asio::ip::tcp::acceptor>(
             boost::asio::ip::tcp::acceptor(
@@ -20,20 +20,31 @@ Server::Server(std::vector<std::shared_ptr<boost::asio::io_context>> &io_context
                 );
 }
 
-Server* Server::getInstance(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts){
-    static Server server(io_contexts);
+Server* Server::getInstance(){
+    static Server server;
     return &server;
 }
 
 void Server::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts){
-    Server* server = getInstance(io_contexts);
+    Server* server = getInstance();
 
     // Number of simultaneous connections
-    for(int i= 0 ; i < 10 ; ++i){
-        server->sessions_.push_back(std::make_unique<Session>(*server->context_server_, *server->acceptor_));
+    for(int i= 0 ; i < max_connections_ ; ++i){
+        server->sessions_.push_back(std::make_shared<Session>(*server->context_server_, *server->acceptor_));
     }
     // Number of Threads
-    for(int i= 0 ; i < 10 ; ++i){
+    for(int i= 0 ; i < number_of_thread_ ; ++i){
         io_contexts.push_back(server->context_server_);
     }
+}
+
+std::vector<Session> Server::getConnectionList() {
+    Server* server = getInstance();
+    std::vector<Session> stc_open;
+    for(const auto& s : server->sessions_){
+        if(s->isOpen()){
+            stc_open.push_back(*s);
+        }
+    }
+    return stc_open;
 }

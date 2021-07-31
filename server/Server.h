@@ -33,27 +33,44 @@ private:
     /**
      * Vector with multiple connections
      */
-    std::vector<std::unique_ptr<Session>> sessions_;
+    std::vector<std::shared_ptr<Session>> sessions_;
+
+    /**
+     * Number of Thread.
+     */
+    const static uint8_t number_of_thread_ = 2;
+
+    /**
+     * Max Connection.
+     */
+    const static uint8_t max_connections_ = 10;
 
 public:
+    /**
+     * Singleton
+     * @param io_contexts
+     * @return
+     */
+    static Server* getInstance();
+
     /**
      * Prepare listeners.
      */
     static void run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
+
+    /**
+     * Return Connection List
+     * @return
+     */
+    static std::vector<Session> getConnectionList();
 
 private:
     /**
      * Prepare available connections.
      * @param io_contexts
      */
-    explicit Server(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
+    Server();
 
-    /**
-     * Singleton
-     * @param io_contexts
-     * @return
-     */
-    static Server* getInstance(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
 };
 
 

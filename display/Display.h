@@ -50,15 +50,31 @@ class Display {
     static void _clear();
 
     /**
-     * Display the header
+     * Display the server header
      */
-    static void _header();
+    static void _serverHeader();
 
     /**
-     * Display the connected list
+     * Display the client header
+     */
+    static void _clientHeader();
+
+    /**
+     * Display the client connected list
      */
     static void _clientConnectionList();
 
+    /**
+     * Display the server connected list
+     */
+    static void _serverConnectionList();
+
+    /**
+     * Fill in the blanks to the specified number of characters
+     * @param str
+     * @param max_size
+     * @return
+     */
     static std::string _getFillString(const std::string &str, uint8_t max_size);
 public:
     /**
@@ -67,6 +83,12 @@ public:
      */
     static void show(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
 
+    /**
+     * Masking String
+     * @param str
+     * @param sp
+     * @return
+     */
     static std::string _mask(const std::string &str, uint8_t sp);
 };
 

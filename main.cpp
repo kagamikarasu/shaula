@@ -21,9 +21,8 @@ int main() {
     Server::run(io_contexts);
 
     // Client run
-    //ClientPool::add("testnet-seed.bitcoin.jonasschnelli.ch", 18333);
-    ClientPool::add("host.docker.internal", 18333);
-
+    ClientPool::add("testnet-seed.bitcoin.jonasschnelli.ch", 18333);
+    //ClientPool::add("host.docker.internal", 18333);
     ClientPool::run(io_contexts);
 
     Display::show(io_contexts);
