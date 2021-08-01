@@ -6,5 +6,5 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} NODE_SRC)
 
 add_library(node STATIC ${NODE_SRC})
 
-target_link_libraries(node PRIVATE boost_coroutine boost_thread Threads::Threads message)
-target_include_directories(node PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(node PUBLIC boost_coroutine boost_thread Threads::Threads message)
+target_include_directories(node INTERFACE ${PROJECT_SOURCE_DIR}/node)

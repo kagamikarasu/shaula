@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 add_executable(${PROJECT_NAME} main.cpp)
+
 find_package(Threads REQUIRED)
 find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
@@ -19,7 +20,7 @@ add_subdirectory(server)
 add_subdirectory(client)
 add_subdirectory(display)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE client server display)
+target_link_libraries(${PROJECT_NAME} PRIVATE display server client)
 
 # test
 enable_testing()

@@ -9,8 +9,8 @@
 //
 
 #include <boost/thread.hpp>
-#include "client/Client.h"
-#include "client/ClientPool.h"
+#include "Client.h"
+#include "ClientPool.h"
 
 Client::Client(boost::asio::io_context &io_context, boost::asio::ip::address_v6 address, uint16_t port) :
     Node(io_context),

@@ -17,16 +17,16 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/spawn.hpp>
-#include "cardinal/Endpoint.h"
-#include "message/Message.h"
-#include "message/Version.h"
-#include "message/Verack.h"
-#include "message/Addr.h"
-#include "message/GetAddr.h"
-#include "message/Ping.h"
-#include "message/Pong.h"
-#include "message/Mempool.h"
-#include "message/Header.h"
+#include "Endpoint.h"
+#include "Message.h"
+#include "Version.h"
+#include "Verack.h"
+#include "Addr.h"
+#include "GetAddr.h"
+#include "Ping.h"
+#include "Pong.h"
+#include "Mempool.h"
+#include "Header.h"
 
 class Node {
 protected:

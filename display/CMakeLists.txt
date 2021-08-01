@@ -6,5 +6,4 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} DISPLAY_SRC)
 
 add_library(display STATIC ${DISPLAY_SRC})
 
-target_link_libraries(display PRIVATE ncurses server client)
-target_include_directories(display PUBLIC ${PROJECT_SOURCE_DIR})
+target_link_libraries(display PUBLIC ncurses server client)

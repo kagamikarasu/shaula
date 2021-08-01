@@ -11,7 +11,7 @@
 #define SHAULA_SESSION_H
 
 #include <boost/thread.hpp>
-#include "node/Node.h"
+#include "Node.h"
 
 /**
  * Session Class

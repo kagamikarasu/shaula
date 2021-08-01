@@ -11,7 +11,7 @@
 #ifndef SHAULA_CLIENT_H
 #define SHAULA_CLIENT_H
 
-#include "node/Node.h"
+#include "Node.h"
 
 /**
  *

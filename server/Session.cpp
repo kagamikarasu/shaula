@@ -8,7 +8,7 @@
 // https://github.com/kagamikarasu/shaula/
 //
 
-#include "server/Session.h"
+#include "Session.h"
 
 Session::Session(boost::asio::io_context &ioContext, boost::asio::ip::tcp::acceptor &acceptor) :
     Node(ioContext),

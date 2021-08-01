@@ -7,3 +7,5 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} CRYPT_SRC)
 add_library(crypt STATIC ${CRYPT_SRC})
 
 target_link_libraries(crypt PRIVATE OpenSSL::Crypto base58)
+
+target_include_directories(crypt INTERFACE ${PROJECT_SOURCE_DIR}/crypt)

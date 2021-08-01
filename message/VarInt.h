@@ -13,8 +13,8 @@
 
 #include <cstdint>
 #include <vector>
-#include "cardinal/Encode.h"
-#include "cardinal/Decode.h"
+#include "Encode.h"
+#include "Decode.h"
 
 /**
  * VarInt Class

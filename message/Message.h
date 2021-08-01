@@ -13,9 +13,9 @@
 
 #include <vector>
 #include <chrono>
-#include "crypt/Crypt.h"
-#include "cardinal/Encode.h"
-#include "cardinal/Endpoint.h"
+#include "Crypt.h"
+#include "Encode.h"
+#include "Endpoint.h"
 #include "Define.h"
 #include "Header.h"
 #include "NetAddr.h"
