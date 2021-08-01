@@ -13,9 +13,9 @@
 
 #include <vector>
 #include <cstdint>
-#include "cardinal/Endpoint.h"
 #include "cardinal/Encode.h"
 #include "cardinal/Decode.h"
+#include "cardinal/Endpoint.h"
 #include "Define.h"
 
 /**

@@ -26,6 +26,7 @@
 #include "message/Ping.h"
 #include "message/Pong.h"
 #include "message/Mempool.h"
+#include "message/Header.h"
 
 class Node {
 protected:

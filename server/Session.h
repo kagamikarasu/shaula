@@ -10,8 +10,8 @@
 #ifndef SHAULA_SESSION_H
 #define SHAULA_SESSION_H
 
-
-#include "Node.h"
+#include <boost/thread.hpp>
+#include "node/Node.h"
 
 /**
  * Session Class

@@ -9,3 +9,8 @@
 //
 #include "TestServer.h"
 
+int main() {
+
+    return 0;
+}
+

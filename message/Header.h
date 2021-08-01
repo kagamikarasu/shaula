@@ -12,9 +12,10 @@
 #define SHAULA_HEADER_H
 
 #include <vector>
-#include "crypt/Crypt.h"
 #include "cardinal/Encode.h"
 #include "cardinal/Decode.h"
+#include "crypt/Crypt.h"
+
 #include "Define.h"
 
 struct {

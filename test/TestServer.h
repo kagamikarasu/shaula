@@ -10,9 +10,9 @@
 #ifndef SHAULA_TESTSERVER_H
 #define SHAULA_TESTSERVER_H
 
-#include "server/Server.h"
-
 class TestServer {
+
+    /*
     void testTenConnection(){
         boost::thread_group threadGroup;
         std::vector<std::shared_ptr<boost::asio::io_context>> io_contexts;
@@ -32,8 +32,11 @@ class TestServer {
             threadGroup.create_thread([io_context_client] { io_context_client->run(); });
         }
 
+        Server::getConnectionList()
+
         threadGroup.join_all();
     }
+     */
 };
 
 

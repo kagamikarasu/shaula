@@ -7,8 +7,8 @@
 // See the following LICENSE file
 // https://github.com/kagamikarasu/shaula/
 //
-#include <boost/thread.hpp>
-#include "Session.h"
+
+#include "server/Session.h"
 
 Session::Session(boost::asio::io_context &ioContext, boost::asio::ip::tcp::acceptor &acceptor) :
     Node(ioContext),

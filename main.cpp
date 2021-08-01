@@ -8,10 +8,9 @@
 // https://github.com/kagamikarasu/shaula/
 //
 
-#include <server/Server.h>
-#include <client/ClientPool.h>
-#include <boost/thread.hpp>
-#include <display/Display.h>
+#include "client/ClientPool.h"
+#include "server/Server.h"
+#include "display/Display.h"
 
 int main() {
     boost::thread_group threadGroup;

@@ -11,8 +11,7 @@
 #ifndef SHAULA_CLIENT_H
 #define SHAULA_CLIENT_H
 
-#include "Node.h"
-#include "crypt/Crypt.h"
+#include "node/Node.h"
 
 /**
  *
