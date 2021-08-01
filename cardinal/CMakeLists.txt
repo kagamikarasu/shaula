@@ -4,4 +4,6 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} CARDINAL_SRC)
 
 add_library(cardinal STATIC ${CARDINAL_SRC})
 
-target_include_directories(cardinal INTERFACE ${PROJECT_SOURCE_DIR}/cardinal)
+target_link_libraries(cardinal PRIVATE OpenSSL::Crypto base58)
+
+target_include_directories(cardinal INTERFACE ${PROJECT_SOURCE_DIR})

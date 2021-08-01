@@ -12,7 +12,6 @@ find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Curses REQUIRED)
 
-add_subdirectory(crypt)
 add_subdirectory(cardinal)
 add_subdirectory(message)
 add_subdirectory(node)
