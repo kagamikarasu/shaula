@@ -17,9 +17,9 @@ add_subdirectory(message)
 add_subdirectory(node)
 add_subdirectory(server)
 add_subdirectory(client)
-add_subdirectory(display)
+add_subdirectory(observer)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE display server client)
+target_link_libraries(${PROJECT_NAME} PRIVATE observer server client)
 
 # test
 enable_testing()
