@@ -15,6 +15,7 @@
 #include "cardinal/encode.h"
 #include "cardinal/decode.h"
 #include "cardinal/crypt.h"
+#include "config/config.h"
 
 #include "define.h"
 

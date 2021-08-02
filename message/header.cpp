@@ -11,7 +11,7 @@
 #include "header.h"
 
 Header::Header() {
-    setMagic(versionMeta.NETWORK);
+    setMagic(Config::getNetwork());
 }
 
 Header::Header(const std::vector<unsigned char> &header_bytes) {

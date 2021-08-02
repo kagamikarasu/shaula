@@ -23,10 +23,7 @@ struct {
 } serviceDef;
 
 struct {
-    std::string USER_AGENT = std::string("/Shaula:0.0.0/");
-    uint32_t PROTOCOL_VERSION_NUMBER = 70016;
     uint16_t SERVICE = serviceDef.NODE_NETWORK | serviceDef.NODE_WITNESS | serviceDef.NODE_NETWORK_LIMITED;
-    std::vector<unsigned char> NETWORK = {0x0B, 0x11, 0x09, 0x07};
 } versionMeta;
 
 struct {

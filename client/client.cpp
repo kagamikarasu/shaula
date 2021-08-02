@@ -47,7 +47,13 @@ void Client::_connect(const boost::asio::yield_context &yield){
     socket_->set_option(option);
 
     // Receiver
-    boost::asio::spawn(io_context_, [this](auto && PH1) { _receive(std::forward<decltype(PH1)>(PH1)); });
+    try{
+        boost::asio::spawn(io_context_, [this](auto && PH1) { _receive(std::forward<decltype(PH1)>(PH1)); });
+    }catch(std::exception& e){
+        // verification required
+        close();
+        return;
+    }
     setAddr();
 }
 
@@ -60,6 +66,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
         last_receive_header_ = std::make_shared<Header>(*header);
         body = getBody(yield, *header);
     }catch(std::exception& e){
+        // verification required
         close();
         return;
     }

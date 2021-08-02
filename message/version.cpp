@@ -11,13 +11,13 @@
 #include "version.h"
 
 Version::Version(const Endpoint &endpoint) {
-    setVersion(versionMeta.PROTOCOL_VERSION_NUMBER);
+    setVersion(Config::getProtocolVersionNumber());
     setService(versionMeta.SERVICE);
     setTimestamp();
     setAddrRecv(endpoint);
     setAddrFrom(endpoint);
     setNonce(Crypt::getRandNonce(8));
-    setUserAgent(versionMeta.USER_AGENT);
+    setUserAgent(Config::getUserAgent());
     setBlockStart(0);
     setRelay(true);
 

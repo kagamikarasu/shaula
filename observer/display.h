@@ -10,10 +10,11 @@
 #ifndef SHAULA_DISPLAY_H
 #define SHAULA_DISPLAY_H
 
+#include "client/client_pool.h"
+#include "server/server.h"
 #include <vector>
 #include <memory>
 #include <boost/asio/io_context.hpp>
-#include <ncurses.h>
 
 /**
  * Display class
