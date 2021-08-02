@@ -8,7 +8,6 @@
 // https://github.com/kagamikarasu/shaula/
 //
 
-#include <boost/thread.hpp>
 #include "client.h"
 #include "client_pool.h"
 
@@ -25,10 +24,10 @@ void Client::run(){
 void Client::_run(const boost::asio::yield_context &yield){
     if(!socket_->is_open()){
         try {
-            _set_run_thread_id();
+            setRunThreadId();
             _connect(yield);
         }catch (std::exception& e){
-            _close();
+            close();
             return;
         }
     }
@@ -61,7 +60,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
         last_receive_header_ = std::make_shared<Header>(*header);
         body = getBody(yield, *header);
     }catch(std::exception& e){
-        _close();
+        close();
         return;
     }
 
@@ -96,21 +95,6 @@ void Client::_receive(const boost::asio::yield_context& yield){
     _receive(yield);
 }
 
-bool Client::isOpen(){
-    return socket_->is_open();
-}
-
-std::string Client::getRunThreadId(){
-    return run_thread_id_;
-}
-
-std::shared_ptr<Version> Client::getVersion(){
-    if(!version_){
-        return std::make_shared<Version>();
-    }
-    return version_;
-}
-
 std::shared_ptr<Header> Client::getLastReceiveHeader(){
     if(!last_receive_header_){
         return std::make_shared<Header>();
@@ -126,13 +110,7 @@ std::string Client::getLastReceiveBodyHead() {
     return body_head_stream.str();
 }
 
-void Client::_set_run_thread_id(){
-    std::ostringstream thread_id_stream;
-    thread_id_stream << boost::this_thread::get_id();
-    run_thread_id_ = thread_id_stream.str();
-}
-
-void Client::_close(){
-    socket_->close();
+void Client::close(){
+    Node::close();
     ClientPool::pullUp(io_context_, address_);
 }

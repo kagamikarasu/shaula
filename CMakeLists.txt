@@ -24,4 +24,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE display server client)
 # test
 enable_testing()
 add_executable(test_server test/TestServer.cpp)
+target_link_libraries(test_server PRIVATE server)
 add_test(NAME run_test_server COMMAND test_server)

@@ -58,6 +58,8 @@ public:
      */
     static void run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
 
+    static void close_all();
+
     /**
      * Return Connection List
      * @return

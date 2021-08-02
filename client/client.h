@@ -17,10 +17,6 @@
  *
  */
 class Client : public Node {
-    /**
-     * Run Thread ID
-     */
-    std::string run_thread_id_;
 
     /**
      * Address being connected
@@ -31,11 +27,6 @@ class Client : public Node {
      * Port being connected
      */
     uint16_t port_;
-
-    /**
-     * Last received version message
-     */
-    std::shared_ptr<Version> version_;
 
     /**
      * Last received header
@@ -64,25 +55,6 @@ public:
     void run();
 
     /**
-     * Check if the connection is maintained.
-     * @return
-     */
-    bool isOpen();
-
-    /**
-     * Returns the thread ID in which this client is currently running.
-     * @return
-     */
-    std::string getRunThreadId();
-
-    /**
-     * Returns the last received Version message.
-     * If this function is read before receiving, a temporary value is returned.
-     * @return
-     */
-    std::shared_ptr<Version> getVersion();
-
-    /**
      * Returns the last received Header.
      * If this function is read before receiving, a temporary value is returned.
      * @return
@@ -96,6 +68,13 @@ public:
      * @return
      */
     std::string getLastReceiveBodyHead();
+
+    /**
+     * Disconnects the connection and removes itself from the connection pool.
+     * At the same time, it starts a new connection.
+     * See ClientPool.h for more details.
+     */
+    void close() override;
 
 private:
     /**
@@ -117,19 +96,6 @@ private:
      * @param yield
      */
     void _receive(const boost::asio::yield_context &yield);
-
-    /**
-     * Set Run Thread ID
-     */
-    void _set_run_thread_id();
-
-    /**
-     * Disconnects the connection and removes itself from the connection pool.
-     * At the same time, it starts a new connection.
-     * See ClientPool.h for more details.
-     */
-    void _close();
-
 };
 
 #endif //SHAULA_CLIENT_H

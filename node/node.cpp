@@ -110,3 +110,28 @@ void Node::setAddr(){
     endpoint_.local_port = socket_->local_endpoint().port();
     endpoint_.remote_port = socket_->remote_endpoint().port();
 }
+
+void Node::setRunThreadId(){
+    std::ostringstream thread_id_stream;
+    thread_id_stream << boost::this_thread::get_id();
+    run_thread_id_ = thread_id_stream.str();
+}
+
+std::string Node::getRunThreadId(){
+    return run_thread_id_;
+}
+
+bool Node::isOpen() {
+    return socket_->is_open();
+}
+
+void Node::close(){
+    socket_->close();
+}
+
+std::shared_ptr<Version> Node::getVersion() {
+    if(!version_){
+        return std::make_shared<Version>();
+    }
+    return version_;
+}

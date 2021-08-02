@@ -17,6 +17,7 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/spawn.hpp>
+#include <boost/thread.hpp>
 #include "cardinal/endpoint.h"
 #include "message/message.h"
 #include "message/version.h"
@@ -29,11 +30,39 @@
 #include "message/header.h"
 
 class Node {
+public:
+
+    /**
+     * Return the last received Version.
+     * @return
+     */
+    std::shared_ptr<Version> getVersion();
+
+    /**
+     * Returns the thread ID that this node is currently running on.
+     */
+    std::string getRunThreadId();
+
+    /**
+     * Check if the socket is open.
+     * @return
+     */
+    bool isOpen();
+
+    /**
+     * Close the socket.
+     * Override destination for details
+     */
+    virtual void close();
+
 protected:
     boost::asio::io_context& io_context_;
     std::shared_ptr<boost::asio::ip::tcp::socket> socket_;
     std::shared_ptr<boost::asio::streambuf> receive_buffer_;
     Endpoint endpoint_;
+
+    std::string run_thread_id_;
+    std::shared_ptr<Version> version_;
 
     /**
      * Constructor
@@ -107,6 +136,11 @@ protected:
      * @param yield
      */
     void sendMempool(const boost::asio::yield_context &yield);
+
+    /**
+     * Set tun threadId
+     */
+    void setRunThreadId();
 };
 
 
