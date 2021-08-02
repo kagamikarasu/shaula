@@ -29,7 +29,6 @@ void Display::show(std::vector<std::shared_ptr<boost::asio::io_context>> &io_con
 
 void Display::_init(){
     initscr();
-
     _show();
 }
 
@@ -50,7 +49,7 @@ void Display::_show(){
 
     timeout(500);
     char ctr = getch();
-    if (ctr < 32){
+    if (0 <= ctr && ctr < 32){
         timeout(-1);
         char input_str[16];
         getstr(input_str);
