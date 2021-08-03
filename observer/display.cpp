@@ -66,7 +66,7 @@ void Display::_clientHeader(){
 }
 
 void Display::_clientConnectionList(){
-    std::map<std::string, Client> c = ClientPool::getConnectionList();
+    std::map<std::string, Client> c = std::map(ClientPool::getConnectionList());
     for(auto v : c){
         addstr(_getFillString(v.second.getRunThreadId(), 16).c_str());
         addstr(_getFillString(v.first, 24).c_str());
