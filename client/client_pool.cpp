@@ -31,6 +31,9 @@ void ClientPool::add(const std::string &dns_address, uint16_t port) {
 
 void ClientPool::add(boost::asio::io_context &io_context, const std::vector<NetAddr> &endpoint_list) {
     ClientPool* clientPool = getInstance();
+
+    std::lock_guard<std::mutex> lock(clientPool->locker_);
+
     for(auto endpoint : endpoint_list){
         if(clientPool->connection_pool_.find(endpoint.getAddressString()) != clientPool->connection_pool_.end()){
             continue;
@@ -55,6 +58,14 @@ void ClientPool::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_c
     }
 }
 
+void ClientPool::close(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
+    ClientPool* clientPool = getInstance();
+
+    std::lock_guard<std::mutex> lock(clientPool->locker_);
+
+    clientPool->_removeCPool(io_context, address);
+}
+
 void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
     ClientPool* clientPool = getInstance();
 
@@ -64,10 +75,15 @@ void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::
     // Remove from connected list
     clientPool->_removeCPool(io_context, address);
 
-    // If empty from unused list, wait for another thread to get it.
-    clientPool->_emptyPoolBlock();
-
     // Add From connected pool, Delete From unused pool.
+    clientPool->_pullUp(io_context);
+}
+
+void ClientPool::resize(boost::asio::io_context &io_context){
+    ClientPool* clientPool = getInstance();
+
+    std::lock_guard<std::mutex> lock(clientPool->locker_);
+
     clientPool->_pullUp(io_context);
 }
 

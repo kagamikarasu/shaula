@@ -12,7 +12,8 @@
 Node::Node(boost::asio::io_context &io_context) :
         io_context_(io_context),
         receive_buffer_(std::make_shared<boost::asio::streambuf>(2048000)),
-        socket_(std::make_shared<boost::asio::ip::tcp::socket>(io_context)){
+        socket_(std::make_shared<boost::asio::ip::tcp::socket>(io_context)),
+        timeout_(std::make_shared<boost::asio::deadline_timer>(io_context)){
 }
 
 std::unique_ptr<Header> Node::getHeader(const boost::asio::yield_context &yield){

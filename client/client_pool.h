@@ -41,12 +41,12 @@ private:
     /**
      * Number of threads to use
      */
-    const static uint8_t number_of_thread_ = 4;
+    const static uint8_t number_of_thread_ = 2;
 
     /**
      * Client Per Thread
      */
-    const static uint8_t client_per_thread = 8;
+    const static uint8_t client_per_thread = 16;
 
     /**
      * pool locker
@@ -88,12 +88,25 @@ public:
     static void run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts);
 
     /**
+     * Remove the specified key from the connected pool.
+     * @param io_context
+     * @param address
+     */
+    static void close(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
+
+    /**
      * Removes the specified address from the pool.
      * Then, use io_context to start a connection from the unused pool.
      * @param io_context
      * @param address
      */
     static void pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
+
+    /**
+     * Use io_context to start a connection from the unused pool.
+     * @param io_context
+     */
+    static void resize(boost::asio::io_context &io_context);
 
     /**
      * Return the list of currently connected clients.

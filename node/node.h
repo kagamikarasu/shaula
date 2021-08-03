@@ -17,6 +17,7 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio/spawn.hpp>
+#include <boost/asio/deadline_timer.hpp>
 #include <boost/thread.hpp>
 #include "cardinal/endpoint.h"
 #include "message/message.h"
@@ -30,6 +31,43 @@
 #include "message/header.h"
 
 class Node {
+private:
+    /**
+     * Receive Buffer
+     */
+    std::shared_ptr<boost::asio::streambuf> receive_buffer_;
+
+protected:
+    /**
+     * IO CONTEXT
+     */
+    boost::asio::io_context& io_context_;
+
+    /**
+     * Socket
+     */
+    std::shared_ptr<boost::asio::ip::tcp::socket> socket_;
+
+    /**
+     * Deadline Timer
+     */
+    std::shared_ptr<boost::asio::deadline_timer> timeout_;
+
+    /**
+     * Connection Address
+     */
+    Endpoint endpoint_;
+
+    /**
+     * Run ThreadID
+     */
+    std::string run_thread_id_;
+
+    /**
+     * Last received Version Message.
+     */
+    std::shared_ptr<Version> version_;
+
 public:
 
     /**
@@ -56,14 +94,6 @@ public:
     virtual void close();
 
 protected:
-    boost::asio::io_context& io_context_;
-    std::shared_ptr<boost::asio::ip::tcp::socket> socket_;
-    std::shared_ptr<boost::asio::streambuf> receive_buffer_;
-    Endpoint endpoint_;
-
-    std::string run_thread_id_;
-    std::shared_ptr<Version> version_;
-
     /**
      * Constructor
      * @param io_context

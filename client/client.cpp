@@ -27,7 +27,6 @@ void Client::_run(const boost::asio::yield_context &yield){
             setRunThreadId();
             _connect(yield);
         }catch (std::exception& e){
-            close();
             return;
         }
     }
@@ -40,20 +39,22 @@ void Client::_connect(const boost::asio::yield_context &yield){
         return;
     }
 
+    // Wait time between connection and receiving Version message
+    timeout_->expires_from_now(boost::posix_time::seconds(7));
+    timeout_->async_wait([this](const boost::system::error_code &ec) {
+        // An error occurs if you cancel.(timeout)
+        if (!ec || version_ == nullptr) {
+            Client::close();
+            return;
+        }
+    });
+
     // Async Connect
     socket_->async_connect(boost::asio::ip::tcp::endpoint(address_, port_), yield);
 
-    boost::asio::socket_base::keep_alive option(false);
-    socket_->set_option(option);
-
     // Receiver
-    try{
-        boost::asio::spawn(io_context_, [this](auto && PH1) { _receive(std::forward<decltype(PH1)>(PH1)); });
-    }catch(std::exception& e){
-        // verification required
-        close();
-        return;
-    }
+    boost::asio::spawn(io_context_, [this](auto && PH1) { _receive(std::forward<decltype(PH1)>(PH1)); });
+
     setAddr();
 }
 
@@ -66,13 +67,12 @@ void Client::_receive(const boost::asio::yield_context& yield){
         last_receive_header_ = std::make_shared<Header>(*header);
         body = getBody(yield, *header);
     }catch(std::exception& e){
-        // verification required
-        close();
         return;
     }
 
     // version
     if(header->isVersion()){
+        timeout_->cancel();
         version_ = std::make_shared<Version>(body);
     }
 
@@ -115,9 +115,11 @@ std::string Client::getLastReceiveBodyHead() {
         body_head_stream << std::hex << std::setfill('0') << std::setw(2) << std::uppercase << (int)v;
     }
     return body_head_stream.str();
+
 }
 
 void Client::close(){
     Node::close();
-    ClientPool::pullUp(io_context_, address_);
+    ClientPool::close(io_context_, address_);
+    ClientPool::resize(io_context_);
 }
