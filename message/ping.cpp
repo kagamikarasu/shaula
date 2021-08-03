@@ -11,7 +11,7 @@
 #include "ping.h"
 
 Ping::Ping() {
-    setCommand(Command.PING);
+    setCommand(CommandDef.PING);
     setNonce();
 }
 

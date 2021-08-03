@@ -15,9 +15,9 @@
 #include "cardinal/encode.h"
 #include "cardinal/decode.h"
 #include "cardinal/crypt.h"
-#include "config/config.h"
 
-#include "define.h"
+#include "config/config.h"
+#include "config/define.h"
 
 struct {
     const int8_t magic = 4;

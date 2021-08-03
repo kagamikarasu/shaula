@@ -11,7 +11,6 @@
 #ifndef SHAULA_MEMPOOL_H
 #define SHAULA_MEMPOOL_H
 
-#include <vector>
 #include "message.h"
 
 /**

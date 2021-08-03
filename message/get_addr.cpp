@@ -11,5 +11,5 @@
 #include "get_addr.h"
 
 GetAddr::GetAddr() {
-    setCommand(Command.GETADDR);
+    setCommand(CommandDef.GETADDR);
 }

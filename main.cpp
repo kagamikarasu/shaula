@@ -18,14 +18,14 @@ int main() {
     std::vector<std::shared_ptr<boost::asio::io_context>> io_contexts;
 
     // Config
-    Config::setConfig("main");
+    Config::setConfig("test");
 
     // Server run
     Server::run(io_contexts);
 
     // Client Preparation
-    // ClientPool::add("testnet-seed.bitcoin.jonasschnelli.ch", 18333);
-    ClientPool::add("host.docker.internal", 18333);
+    ClientPool::add("testnet-seed.bitcoin.jonasschnelli.ch", 18333);
+    // ClientPool::add("host.docker.internal", 18333);
     // ClientPool::add("seed.bitcoinstats.com", 8333);
     // ClientPool::add("dnsseed.bluematt.me", 8333);
 

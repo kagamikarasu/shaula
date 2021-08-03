@@ -16,7 +16,6 @@
 #include "cardinal/encode.h"
 #include "cardinal/decode.h"
 #include "cardinal/endpoint.h"
-#include "define.h"
 
 /**
  * NetAddr Class

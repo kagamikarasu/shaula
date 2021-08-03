@@ -11,5 +11,5 @@
 #include "verack.h"
 
 Verack::Verack() {
-    setCommand(Command.VERACK);
+    setCommand(CommandDef.VERACK);
 }

@@ -8,7 +8,7 @@
 // https://github.com/kagamikarasu/shaula/
 //
 #include "net_addr.h"
-
+#include "config/config.h"
 
 NetAddr::NetAddr(const std::vector<unsigned char> &bytes) {
 
@@ -37,7 +37,7 @@ void NetAddr::setTimestamp(const std::vector<unsigned char> &&bytes) {
 }
 
 void NetAddr::setService(){
-    service_ = versionMeta.SERVICE;
+    service_ = NodeInfo.SERVICE;
 }
 
 void NetAddr::setService(const std::vector<unsigned char> &&bytes) {

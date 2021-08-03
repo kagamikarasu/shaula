@@ -11,7 +11,7 @@
 #include "pong.h"
 
 Pong::Pong(const std::vector<unsigned char> &bytes) {
-    setCommand(Command.PONG);
+    setCommand(CommandDef.PONG);
     setNonce(bytes);
 }
 

@@ -11,5 +11,5 @@
 #include "mempool.h"
 
 Mempool::Mempool() {
-    setCommand(Command.MEMPOOL);
+    setCommand(CommandDef.MEMPOOL);
 }

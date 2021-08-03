@@ -12,7 +12,6 @@
 #define SHAULA_VERSION_H
 
 #include "message.h"
-#include "var_str.h"
 
 struct {
     uint8_t version = 4;

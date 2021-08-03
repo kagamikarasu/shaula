@@ -62,31 +62,31 @@ std::vector<unsigned char> Header::getPayloadChecksum(){
 }
 
 bool Header::isVersion(){
-    return Command.VERSION == getCommand();
+    return CommandDef.VERSION == getCommand();
 }
 
 bool Header::isVerack(){
-    return Command.VERACK == getCommand();
+    return CommandDef.VERACK == getCommand();
 }
 
 bool Header::isAddr(){
-    return Command.ADDR == getCommand();
+    return CommandDef.ADDR == getCommand();
 }
 
 bool Header::isGetAddr(){
-    return Command.GETADDR == getCommand();
+    return CommandDef.GETADDR == getCommand();
 }
 
 bool Header::isPing(){
-    return Command.PING == getCommand();
+    return CommandDef.PING == getCommand();
 }
 
 bool Header::isPong(){
-    return Command.PONG == getCommand();
+    return CommandDef.PONG == getCommand();
 }
 
 bool Header::isMempool(){
-    return Command.MEMPOOL == getCommand();
+    return CommandDef.MEMPOOL == getCommand();
 }
 
 std::vector<unsigned char> Header::getHex(){

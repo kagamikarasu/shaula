@@ -26,7 +26,7 @@ void Message::setPayload(const std::vector<unsigned char> &bytes) {
     payload_ = bytes;
 }
 
-void Message::setCommand(const std::string &command) {
+void Message::setCommand(const char* &command) {
     header_->setCommand(command);
 }
 

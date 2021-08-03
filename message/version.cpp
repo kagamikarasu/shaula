@@ -11,17 +11,17 @@
 #include "version.h"
 
 Version::Version(const Endpoint &endpoint) {
-    setVersion(Config::getProtocolVersionNumber());
-    setService(versionMeta.SERVICE);
+    setVersion(NodeInfo.PROTOCOL_VERSION_NUMBER);
+    setService(NodeInfo.SERVICE);
     setTimestamp();
     setAddrRecv(endpoint);
     setAddrFrom(endpoint);
     setNonce(Crypt::getRandNonce(8));
-    setUserAgent(Config::getUserAgent());
+    setUserAgent(NodeInfo.USER_AGENT);
     setBlockStart(0);
     setRelay(true);
 
-    setCommand(Command.VERSION);
+    setCommand(CommandDef.VERSION);
 }
 
 Version::Version(const std::vector<unsigned char> &bytes) {

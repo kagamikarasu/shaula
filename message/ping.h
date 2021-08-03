@@ -10,9 +10,7 @@
 #ifndef SHAULA_PING_H
 #define SHAULA_PING_H
 
-#include <vector>
 #include "message.h"
-#include "define.h"
 
 /**
  * Ping Class

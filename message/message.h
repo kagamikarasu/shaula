@@ -16,10 +16,11 @@
 #include "cardinal/crypt.h"
 #include "cardinal/encode.h"
 #include "cardinal/endpoint.h"
-#include "define.h"
+#include "config/define.h"
 #include "header.h"
-#include "net_addr.h"
-#include "var_int.h"
+#include "struct/net_addr.h"
+#include "struct/var_str.h"
+#include "struct/var_int.h"
 
 /**
  * Message Class (Base)
@@ -87,7 +88,7 @@ protected:
      * Wants to be called from a derived class
      * @param command_name
      */
-    void setCommand(const std::string &command_name);
+    void setCommand(const char* &command_name);
 
     /**
      * Set the payload.

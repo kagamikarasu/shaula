@@ -11,9 +11,7 @@
 #ifndef SHAULA_PONG_H
 #define SHAULA_PONG_H
 
-#include <vector>
 #include "message.h"
-#include "define.h"
 
 /**
  * Pong Class
