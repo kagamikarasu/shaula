@@ -162,3 +162,7 @@ std::string Version::getUserAgent(){
 std::string Version::getBlockHeight(){
     return std::to_string(start_height_);
 }
+
+void Version::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield, const Endpoint &endpoint) {
+    (std::make_unique<Version>(endpoint))->sendMessage(socket, yield);
+}

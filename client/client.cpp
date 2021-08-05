@@ -31,7 +31,7 @@ void Client::_run(const boost::asio::yield_context &yield){
         }
     }
 
-    sendVersion(yield);
+    Version::send(*socket_, yield, endpoint_);
 }
 
 void Client::_connect(const boost::asio::yield_context &yield){
@@ -78,21 +78,18 @@ void Client::_receive(const boost::asio::yield_context& yield){
 
     // verack
     if(header->isVerack()){
-        sendVerack(yield);
-        sendGetAddr(yield);
+        Verack::send(*socket_, yield);
+        GetAddr::send(*socket_, yield);
     }
 
     // addr
     if(header->isAddr()){
-        std::unique_ptr<Addr> addr = std::make_unique<Addr>(body);
-        std::vector<NetAddr> addr_list = addr->getAddrList();
-        ClientPool::add(io_context_, addr_list);
+        ClientPool::add(io_context_, std::make_unique<Addr>(body)->getAddrList());
     }
 
     // ping
     if(header->isPing()){
-        std::unique_ptr<Ping> ping = std::make_unique<Ping>(body);
-        sendPong(yield, ping->getNonce());
+        Pong::send(*socket_, yield, std::make_unique<Ping>(body)->getNonce());
     }
 
     // Store the first byte for browsing.

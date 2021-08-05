@@ -25,7 +25,7 @@ int main() {
 
     // Client Preparation
     ClientPool::add("testnet-seed.bitcoin.jonasschnelli.ch", 18333);
-    // ClientPool::add("host.docker.internal", 18333);
+    //ClientPool::add("host.docker.internal", 18333);
     // ClientPool::add("seed.bitcoinstats.com", 8333);
     // ClientPool::add("dnsseed.bluematt.me", 8333);
 

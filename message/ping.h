@@ -48,6 +48,13 @@ public:
      */
     std::vector<unsigned char> getMessage() override;
 
+    /**
+     * Asynchronous Transfer
+     * @param socket
+     * @param yield
+     */
+    static void send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield);
+
 private:
     /**
      * Generate and set the nonce value.

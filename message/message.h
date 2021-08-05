@@ -13,6 +13,8 @@
 
 #include <vector>
 #include <chrono>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/spawn.hpp>
 #include "cardinal/crypt.h"
 #include "cardinal/encode.h"
 #include "cardinal/endpoint.h"
@@ -97,6 +99,12 @@ protected:
      */
     void setPayload(const std::vector<unsigned char> &bytes);
 
+    /**
+     * Asynchronous Transfer
+     * @param socket
+     * @param yield
+     */
+    void sendMessage(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield);
 };
 
 

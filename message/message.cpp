@@ -8,6 +8,7 @@
 // https://github.com/kagamikarasu/shaula/
 //
 
+#include <boost/asio/write.hpp>
 #include "message.h"
 
 Message::Message() : header_(std::make_unique<Header>()){
@@ -65,4 +66,10 @@ std::vector<unsigned char> Message::getBodyHeadBytes(){
         return {&payload_[0], &payload_[40]};
     }
     return payload_;
+}
+
+void Message::sendMessage(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield){
+    std::unique_ptr<std::vector<unsigned char>> send_data =
+            std::make_unique<std::vector<unsigned char>>(this->getMessage());
+    boost::asio::async_write(socket, boost::asio::buffer(*send_data), yield);
 }

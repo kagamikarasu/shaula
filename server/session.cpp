@@ -37,16 +37,15 @@ void Session::receive(const boost::asio::yield_context &yield){
         header = getHeader(yield);
         body = getBody(yield, *header);
     }catch(std::exception& e){
-        close();
+        this->close();
         return;
     }
 
     // version
     if(header->isVersion()){
-        version_ = std::make_shared<Version>(body);
-        sendVersion(yield);
-        sendVerack(yield);
-        sendPing(yield);
+        Version::send(*socket_, yield, endpoint_);
+        Verack::send(*socket_, yield);
+        Ping::send(*socket_, yield);
     }
 
     // getaddr

@@ -28,3 +28,8 @@ std::vector<unsigned char> Pong::getMessage() {
 
     return Message::getMessage();
 }
+
+void Pong::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield,
+                const std::vector<unsigned char> &bytes) {
+    (std::make_unique<Pong>(bytes))->sendMessage(socket, yield);
+}

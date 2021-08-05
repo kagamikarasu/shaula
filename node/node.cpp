@@ -45,54 +45,6 @@ std::vector<unsigned char> Node::getBody(const boost::asio::yield_context &yield
     return s_rdv;
 }
 
-void Node::sendVersion(const boost::asio::yield_context &yield) {
-    std::unique_ptr<Version> ver = std::make_unique<Version>(endpoint_);
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            ver->getMessage());
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
-void Node::sendVerack(const boost::asio::yield_context &yield){
-    std::unique_ptr<Verack> ver = std::make_unique<Verack>();
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            ver->getMessage());
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
-void Node::sendPing(const boost::asio::yield_context &yield){
-    std::unique_ptr<Ping> ping = std::make_unique<Ping>();
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            ping->getMessage());
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
-void Node::sendPong(const boost::asio::yield_context &yield, const std::vector<unsigned char> &nonce){
-    std::unique_ptr<Pong> pong = std::make_unique<Pong>(nonce);
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            pong->getMessage());
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
-void Node::sendGetAddr(const boost::asio::yield_context &yield){
-    std::unique_ptr<GetAddr> ver = std::make_unique<GetAddr>();
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            ver->getMessage());
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
-void Node::sendMempool(const boost::asio::yield_context &yield){
-    std::unique_ptr<Mempool> mempool = std::make_unique<Mempool>();
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            mempool->getMessage());
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
-void Node::sendRaw(const boost::asio::yield_context &yield, const std::string &hex_str){
-    std::unique_ptr<std::vector<unsigned char>> send_data = std::make_unique<std::vector<unsigned char>>(
-            Crypt::toHexFromHexStr(hex_str));
-    boost::asio::async_write(*socket_, boost::asio::buffer(*send_data), yield);
-}
-
 void Node::setAddr(){
     if(socket_->local_endpoint().address().is_v4()){
         endpoint_.local_address = boost::asio::ip::make_address_v6(

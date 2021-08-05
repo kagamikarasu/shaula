@@ -29,6 +29,14 @@ void ClientPool::add(const std::string &dns_address, uint16_t port) {
     }
 }
 
+void ClientPool::add(boost::asio::io_context &io_context, const std::string &address, uint16_t port) {
+    ClientPool* clientPool = getInstance();
+
+    std::lock_guard<std::mutex> lock(clientPool->locker_);
+
+    clientPool->_addUPool(address, port);
+}
+
 void ClientPool::add(boost::asio::io_context &io_context, const std::vector<NetAddr> &endpoint_list) {
     ClientPool* clientPool = getInstance();
 
@@ -125,15 +133,6 @@ void ClientPool::_removeCPool(boost::asio::io_context &io_context, const boost::
     auto itd = connection_pool_.find(address.to_string());
     connection_pool_.erase(itd);
     --thread_connection_manager_.at(&io_context);
-}
-
-void ClientPool::_emptyPoolBlock(){
-    while(true){
-        if(!unused_pool_.empty()){
-            break;
-        }
-        sleep(1);
-    }
 }
 
 std::map<std::string, Client> ClientPool::getConnectionList(){

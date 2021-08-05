@@ -40,3 +40,7 @@ std::vector<unsigned char> Ping::getMessage() {
 std::vector<unsigned char> Ping::getNonce() {
     return nonce_;
 }
+
+void Ping::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield){
+    (std::make_unique<Ping>())->sendMessage(socket, yield);
+}

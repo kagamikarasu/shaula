@@ -74,6 +74,15 @@ public:
     static void add(const std::string &dns_address, uint16_t port);
 
     /**
+     * Add Connection From Address
+     * Ex. Use Direct IP Address
+     * @param io_context
+     * @param address
+     * @param port
+     */
+    static void add(boost::asio::io_context &io_context, const std::string &address, uint16_t port);
+
+    /**
      * Add Connection From NetAddrVector
      * Use Addr Response
      * @param io_context
@@ -142,12 +151,6 @@ private:
      * @param address
      */
     void _removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
-
-    /**
-     * Block until unconnected list is accumulated.
-     */
-    void _emptyPoolBlock();
-
 };
 
 

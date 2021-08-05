@@ -10,6 +10,10 @@
 
 #include "get_addr.h"
 
-GetAddr::GetAddr() {
+GetAddr::GetAddr(){
     setCommand(CommandDef.GETADDR);
+}
+
+void GetAddr::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield) {
+    (std::make_unique<GetAddr>())->sendMessage(socket, yield);
 }

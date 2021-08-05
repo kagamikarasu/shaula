@@ -20,6 +20,13 @@
 class GetAddr : public Message {
 public:
     explicit GetAddr();
+
+    /**
+     * Asynchronous Transfer
+     * @param socket
+     * @param yield
+     */
+    static void send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield);
 };
 
 

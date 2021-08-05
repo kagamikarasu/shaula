@@ -112,6 +112,14 @@ public:
      */
     std::string getBlockHeight();
 
+    /**
+     * Asynchronous Transfer
+     * @param socket
+     * @param yield
+     * @param endpoint
+     */
+    static void send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield, const Endpoint &endpoint);
+
 private:
     /**
      * Set Version Number From Int

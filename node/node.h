@@ -122,52 +122,6 @@ protected:
     void setAddr();
 
     /**
-     * Send Version Command (Assumed Get Version)
-     * @param yield
-     */
-    void sendVersion(const boost::asio::yield_context &yield);
-
-    /**
-     * Send Verack Command (Assumed Receive Verack)
-     * @param yield
-     */
-    void sendVerack(const boost::asio::yield_context &yield);
-
-    /**
-     * Send Raw (test)
-     * @param yield
-     * @param hex_str
-     */
-    void sendRaw(const boost::asio::yield_context &yield, const std::string &hex_str);
-
-    /**
-     * Send GetAddr Command (Assumed Get Addr)
-     * @param yield
-     */
-    void sendGetAddr(const boost::asio::yield_context &yield);
-
-    /**
-     * Send Ping Command (Assumed Get Pong)
-     * @param yield
-     */
-    void sendPing(const boost::asio::yield_context &yield);
-
-    /**
-     * Send Pong Command (Assumed Receive Ping)
-     * second args bytes is ping nonce value
-     * @param yield
-     * @param bytes
-     */
-    void sendPong(const boost::asio::yield_context &yield, const std::vector<unsigned char> &bytes);
-
-    /**
-     * Send Mempool Command (Assumed Get Inv)
-     * Only Remote Node Service is BLOOM
-     * @param yield
-     */
-    void sendMempool(const boost::asio::yield_context &yield);
-
-    /**
      * Set tun threadId
      */
     void setRunThreadId();

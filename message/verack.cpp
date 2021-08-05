@@ -13,3 +13,7 @@
 Verack::Verack() {
     setCommand(CommandDef.VERACK);
 }
+
+void Verack::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield) {
+    (std::make_unique<Verack>())->sendMessage(socket, yield);
+}
