@@ -23,7 +23,7 @@ void Session::run(){
 void Session::accept(const boost::asio::yield_context &yield){
     setRunThreadId();
 
-    acceptor_.async_accept(*socket_, yield);
+    acceptor_.async_accept(socket_, yield);
     setAddr();
     receive(yield);
 }
@@ -43,9 +43,9 @@ void Session::receive(const boost::asio::yield_context &yield){
 
     // version
     if(header->isVersion()){
-        Version::send(*socket_, yield, endpoint_);
-        Verack::send(*socket_, yield);
-        Ping::send(*socket_, yield);
+        Version::send(socket_, yield, endpoint_);
+        Verack::send(socket_, yield);
+        Ping::send(socket_, yield);
     }
 
     // getaddr

@@ -31,7 +31,7 @@ private:
     /**
      * List of connections in progress
      */
-    std::map<std::string, Client> connection_pool_;
+    std::map<std::string, std::shared_ptr<Client>> connection_pool_;
 
     /**
      * List of unconnected
@@ -104,14 +104,6 @@ public:
     static void close(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
 
     /**
-     * Removes the specified address from the pool.
-     * Then, use io_context to start a connection from the unused pool.
-     * @param io_context
-     * @param address
-     */
-    static void pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
-
-    /**
      * Use io_context to start a connection from the unused pool.
      * @param io_context
      */
@@ -121,7 +113,7 @@ public:
      * Return the list of currently connected clients.
      * @return
      */
-    static std::map<std::string, Client> getConnectionList();
+    static std::map<std::string, std::shared_ptr<Client>> getConnectionList();
 
 private:
 

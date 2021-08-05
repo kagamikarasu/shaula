@@ -29,13 +29,14 @@
 #include "message/pong.h"
 #include "message/mempool.h"
 #include "message/header.h"
+#include "last_recv.h"
 
 class Node {
 private:
     /**
      * Receive Buffer
      */
-    std::shared_ptr<boost::asio::streambuf> receive_buffer_;
+    boost::asio::streambuf receive_buffer_;
 
 protected:
     /**
@@ -46,12 +47,12 @@ protected:
     /**
      * Socket
      */
-    std::shared_ptr<boost::asio::ip::tcp::socket> socket_;
+    boost::asio::ip::tcp::socket socket_;
 
     /**
      * Deadline Timer
      */
-    std::shared_ptr<boost::asio::deadline_timer> timeout_;
+    boost::asio::deadline_timer timeout_;
 
     /**
      * Connection Address
@@ -66,7 +67,7 @@ protected:
     /**
      * Last received Version Message.
      */
-    std::shared_ptr<Version> version_;
+    std::shared_ptr<LastRecv> last_recv_;
 
 public:
 
@@ -74,7 +75,7 @@ public:
      * Return the last received Version.
      * @return
      */
-    std::shared_ptr<Version> getVersion();
+    std::weak_ptr<LastRecv> getLastRecv();
 
     /**
      * Returns the thread ID that this node is currently running on.

@@ -28,16 +28,6 @@ class Client : public Node {
      */
     uint16_t port_;
 
-    /**
-     * Last received header
-     */
-    std::shared_ptr<Header> last_receive_header_;
-
-    /**
-     * Last received body head body
-     */
-    std::vector<unsigned char> last_receive_body_head_;
-
 public:
     /**
      * Constructor.
@@ -53,21 +43,6 @@ public:
      * It sends and receives data asynchronously.
      */
     void run();
-
-    /**
-     * Returns the last received Header.
-     * If this function is read before receiving, a temporary value is returned.
-     * @return
-     */
-    std::shared_ptr<Header> getLastReceiveHeader();
-
-
-    /**
-     * Get the first few bytes of the Body.
-     * Uppercase
-     * @return
-     */
-    std::string getLastReceiveBodyHead();
 
     /**
      * Disconnects the connection and removes itself from the connection pool.

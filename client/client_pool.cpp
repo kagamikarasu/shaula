@@ -21,7 +21,9 @@ void ClientPool::add(const std::string &dns_address, uint16_t port) {
     // Name resolution
     std::vector<boost::asio::ip::address_v6> v6_addresses = Resolver::getAddresses(dns_address);
 
+    // Add to unused pool
     for(const auto& v6_address : v6_addresses){
+        // Exclude those that are already connected
         if(clientPool->connection_pool_.find(v6_address.to_string()) != clientPool->connection_pool_.end()){
             continue;
         }
@@ -74,19 +76,6 @@ void ClientPool::close(boost::asio::io_context &io_context, const boost::asio::i
     clientPool->_removeCPool(io_context, address);
 }
 
-void ClientPool::pullUp(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
-    ClientPool* clientPool = getInstance();
-
-    // If it is locked in another thread, wait the specified time and check again.
-    std::lock_guard<std::mutex> lock(clientPool->locker_);
-
-    // Remove from connected list
-    clientPool->_removeCPool(io_context, address);
-
-    // Add From connected pool, Delete From unused pool.
-    clientPool->_pullUp(io_context);
-}
-
 void ClientPool::resize(boost::asio::io_context &io_context){
     ClientPool* clientPool = getInstance();
 
@@ -100,8 +89,8 @@ void ClientPool::_addUPool(const std::string &address, uint16_t port){
 }
 
 void ClientPool::_addCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port){
-    connection_pool_.insert(std::make_pair(address.to_string(), Client(io_context, address, port)));
-    connection_pool_.at(address.to_string()).run();
+    connection_pool_.insert(std::make_pair(address.to_string(), std::make_shared<Client>(io_context, address, port)));
+    connection_pool_.at(address.to_string())->run();
 
     if(!thread_connection_manager_.contains(&io_context)){
         thread_connection_manager_.insert(std::make_pair(&io_context, 0));
@@ -135,6 +124,6 @@ void ClientPool::_removeCPool(boost::asio::io_context &io_context, const boost::
     --thread_connection_manager_.at(&io_context);
 }
 
-std::map<std::string, Client> ClientPool::getConnectionList(){
+std::map<std::string, std::shared_ptr<Client>> ClientPool::getConnectionList(){
     return getInstance()->connection_pool_;
 }

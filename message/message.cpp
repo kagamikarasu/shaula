@@ -51,11 +51,11 @@ std::vector<unsigned char> Message::getMessage() {
     setLength();
     setChecksum();
 
-    // Header
+    // Set Header
     auto header = header_->getHex();
     message.insert(message.end(), header.begin(), header.end());
 
-    // Payload
+    // Set Payload
     message.insert(message.end(), payload_.begin(), payload_.end());
 
     return message;

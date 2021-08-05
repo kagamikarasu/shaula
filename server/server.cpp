@@ -38,20 +38,12 @@ void Server::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_conte
     }
 }
 
-void Server::close_all(){
+std::vector<Session*> Server::getConnectionList() {
     Server* server = getInstance();
-
-    for(const auto& s : server->sessions_){
-        s->close();
-    }
-}
-
-std::vector<Session> Server::getConnectionList() {
-    Server* server = getInstance();
-    std::vector<Session> stc_open;
+    std::vector<Session*> stc_open;
     for(const auto& s : server->sessions_){
         if(s->isOpen()){
-            stc_open.push_back(*s);
+            stc_open.push_back(s.get());
         }
     }
     return stc_open;

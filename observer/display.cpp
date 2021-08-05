@@ -40,11 +40,11 @@ void Display::_show(){
 
     addstr("\n");
 
-    /*
+
     addstr("Server Connection List.\n");
     _serverHeader();
     _serverConnectionList();
-    */
+
 
     timeout(500);
     char ctr = getch();
@@ -66,16 +66,18 @@ void Display::_clientHeader(){
 }
 
 void Display::_clientConnectionList(){
-    std::map<std::string, Client> c = std::map(ClientPool::getConnectionList());
-    for(auto v : c){
-        addstr(_getFillString(v.second.getRunThreadId(), 16).c_str());
+    std::map<std::string, std::shared_ptr<Client>> c = std::map(ClientPool::getConnectionList());
+    for(const auto& v : c){
+        addstr(_getFillString(v.second->getRunThreadId(), 16).c_str());
         addstr(_getFillString(v.first, 24).c_str());
 
-        if(!v.second.getLastReceiveBodyHead().empty()) {
-            addstr(_getFillString(v.second.getVersion()->getUserAgent(), 24).c_str());
-            addstr(_getFillString(v.second.getVersion()->getBlockHeight(), 16).c_str());
-            addstr(_getFillString(v.second.getLastReceiveHeader()->getCommand(), 16).c_str());
-            addstr(v.second.getLastReceiveBodyHead().c_str());
+        std::shared_ptr<LastRecv> last_recv = v.second->getLastRecv().lock();
+
+        if(!last_recv->getHeadBody().empty()) {
+            addstr(_getFillString(last_recv->getVersion().getUserAgent(), 24).c_str());
+            addstr(_getFillString(last_recv->getVersion().getBlockHeight(), 16).c_str());
+            addstr(_getFillString(last_recv->getHeader().getCommand(), 16).c_str());
+            addstr(last_recv->getHeadBody().c_str());
         }
         addstr("\n");
     }
@@ -87,10 +89,10 @@ void Display::_serverHeader(){
 }
 
 void Display::_serverConnectionList(){
-    std::vector<Session> s = Server::getConnectionList();
+    std::vector<Session*> s = std::vector<Session*>(Server::getConnectionList());
     for(auto v : s){
-        addstr(_getFillString(v.getRunThreadId(), 16).c_str());
-        addstr(_getFillString(v.getAddress(), 24).c_str());
+        addstr(_getFillString(v->getRunThreadId(), 16).c_str());
+        addstr(_getFillString(v->getAddress(), 24).c_str());
         addstr("\n");
     }
 }
