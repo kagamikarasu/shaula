@@ -1,5 +1,5 @@
 //
-// Client.cpp
+// client.cpp
 //
 // Copyright (c) 2021 Yuya Takeda (@kagamikarasu)
 //
@@ -68,26 +68,9 @@ void Client::_receive(const boost::asio::yield_context& yield){
         return;
     }
 
-    // version
-    if(last_recv_->getHeader().isVersion()){
-        timeout_.cancel();
-        last_recv_->setVersion(body);
-    }
-
-    // verack
-    if(last_recv_->getHeader().isVerack()){
-        Verack::send(socket_, yield);
-        GetAddr::send(socket_, yield);
-    }
-
-    // addr
-    if(last_recv_->getHeader().isAddr()){
-        ClientPool::add(io_context_, std::make_unique<Addr>(body)->getAddrList());
-    }
-
-    // ping
-    if(last_recv_->getHeader().isPing()){
-        Pong::send(socket_, yield, std::make_unique<Ping>(body)->getNonce());
+    // Listener
+    for(const auto& gl : listeners_){
+        gl->executor(last_recv_->getHeader(), body, yield);
     }
 
     // Store the first byte for browsing.

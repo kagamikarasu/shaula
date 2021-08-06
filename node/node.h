@@ -1,5 +1,5 @@
 //
-// Node.h
+// node.h
 //
 // Copyright (c) 2021 Yuya Takeda (@kagamikarasu)
 //
@@ -30,6 +30,7 @@
 #include "message/mempool.h"
 #include "message/header.h"
 #include "last_recv.h"
+#include "listener/listener_if.h"
 
 class Node {
 private:
@@ -68,6 +69,11 @@ protected:
      * Last received Version Message.
      */
     std::shared_ptr<LastRecv> last_recv_;
+
+    /**
+     * Listener List
+     */
+    std::vector<std::shared_ptr<ListenerIF>> listeners_;
 
 public:
 
@@ -115,6 +121,11 @@ protected:
      * @return
      */
     std::vector<unsigned char> getBody(const boost::asio::yield_context &yield, Header &header);
+
+    /**
+     * Add Listener
+     */
+    void addListener();
 
     /**
      * Set Local Address & Remote Address

@@ -1,5 +1,5 @@
 //
-// Node.cpp
+// node.cpp
 //
 // Copyright (c) 2021 Yuya Takeda (@kagamikarasu)
 //
@@ -7,6 +7,10 @@
 // See the following LICENSE file
 // https://github.com/kagamikarasu/shaula/
 //
+#include <node/listener/listener_version.h>
+#include <node/listener/listener_verack.h>
+#include <node/listener/listener_addr.h>
+#include <node/listener/listener_ping.h>
 #include "node.h"
 
 Node::Node(boost::asio::io_context &io_context) :
@@ -15,6 +19,8 @@ Node::Node(boost::asio::io_context &io_context) :
         socket_(io_context),
         timeout_(io_context),
         last_recv_(std::make_shared<LastRecv>()){
+
+    addListener();
 }
 
 std::unique_ptr<Header> Node::getHeader(const boost::asio::yield_context &yield){
@@ -85,4 +91,12 @@ void Node::close(){
 
 std::weak_ptr<LastRecv> Node::getLastRecv() {
     return last_recv_;
+}
+
+void Node::addListener() {
+    NodeStruct f = {io_context_, socket_, timeout_};
+    listeners_.push_back(std::make_shared<ListenerVersion>(f, *last_recv_));
+    listeners_.push_back(std::make_shared<ListenerVerack>(f, *last_recv_));
+    listeners_.push_back(std::make_shared<ListenerAddr>(f, *last_recv_));
+    listeners_.push_back(std::make_shared<ListenerPing>(f, *last_recv_));
 }
