@@ -43,7 +43,7 @@ std::vector<Session*> Server::getConnectionList() {
     std::vector<Session*> stc_open;
     for(const auto& s : server->sessions_){
         if(s->isOpen()){
-            stc_open.push_back(s.get());
+            stc_open.push_back(&*s);
         }
     }
     return stc_open;
