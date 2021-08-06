@@ -19,11 +19,7 @@ void LastRecv::setHeader(const Header& header){
 }
 
 void LastRecv::setHeadBody(const std::vector<unsigned char> &bytes){
-    std::ostringstream body_head_stream;
-    for (auto v : bytes) {
-        body_head_stream << std::hex << std::setfill('0') << std::setw(2) << std::uppercase << (int)v;
-    }
-    head_body_ = body_head_stream.str();
+    head_body_ = Decode::toHexUpperString(bytes);
 }
 
 Version &LastRecv::getVersion() {

@@ -15,7 +15,7 @@
 #include <memory>
 #include <string>
 #include <cstring>
-#include <libbase58.h>
+#include "base58.h"
 #include <openssl/sha.h>
 #include <openssl/ripemd.h>
 #include <openssl/rand.h>

@@ -80,6 +80,13 @@ public:
      * @return
      */
     static std::vector<unsigned char> fill(const std::string &str, size_t length);
+
+    /**
+     * Convert a byte string to a Vector<unsigned char>
+     * @param hex_bin
+     * @return
+     */
+    static std::vector<unsigned char> toBytesFromHexStr(const std::string &hex_bin);
 };
 
 

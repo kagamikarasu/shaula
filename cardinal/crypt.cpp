@@ -9,6 +9,7 @@
 //
 
 #include "crypt.h"
+#include "encode.h"
 
 std::vector<unsigned char> Crypt::sha256(const std::vector<unsigned char> &bytes) {
     std::vector<unsigned char> vec;
@@ -69,7 +70,7 @@ std::string Crypt::getBase58CheckAddress(const std::vector<unsigned char> &bytes
 }
 
 std::string Crypt::getBase58CheckAddress(const std::string &hex_bin){
-    std::vector<unsigned char> vec = toHexFromHexStr(hex_bin);
+    std::vector<unsigned char> vec = Encode::toBytesFromHexStr(hex_bin);
     return getBase58CheckAddress(vec);
 }
 

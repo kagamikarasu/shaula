@@ -41,6 +41,20 @@ public:
      * @return
      */
     static std::string unFillToString(const std::vector<unsigned char> &str);
+
+    /**
+     * Convert a byte to a string (HEX Upper)
+     * @param bytes
+     * @return
+     */
+    static std::string toHexUpperString(const std::vector<unsigned char> &bytes);
+
+    /**
+     * Convert a byte to a string (HEX Lower)
+     * @param bytes
+     * @return
+     */
+    static std::string toHexLowerString(const std::vector<unsigned char> &bytes);
 };
 
 #endif //SHAULA_DECODE_H
