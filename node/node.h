@@ -30,7 +30,6 @@
 #include "message/mempool.h"
 #include "message/header.h"
 #include "last_recv.h"
-#include "listener/listener_if.h"
 
 class Node {
 private:
