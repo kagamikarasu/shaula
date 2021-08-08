@@ -11,9 +11,9 @@
 #include "client.h"
 #include "client_pool.h"
 
-Client::Client(boost::asio::io_context &io_context, boost::asio::ip::address_v6 address, uint16_t port) :
+Client::Client(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port) :
     Node(io_context),
-    address_(std::move(address)),
+    address_(address),
     port_(port){
 }
 
