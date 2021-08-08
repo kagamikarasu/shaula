@@ -46,7 +46,7 @@ void Display::_show(){
     _serverConnectionList();
 
 
-    timeout(500);
+    timeout(100);
     char ctr = getch();
     if (0 <= ctr && ctr < 32){
         timeout(-1);
@@ -59,7 +59,7 @@ void Display::_show(){
 void Display::_clientHeader(){
     addstr("Thread\t\t");
     addstr("Address\t\t\t");
-    addstr("UserAgent\t\t");
+    addstr("UserAgent\t\t\t");
     addstr("Block\t\t");
     addstr("RecvHeader\t");
     addstr("RecvHeadBody\n");
@@ -74,7 +74,7 @@ void Display::_clientConnectionList(){
         std::shared_ptr<LastRecv> last_recv = v.second->getLastRecv().lock();
 
         if(!last_recv->getHeadBody().empty()) {
-            addstr(_getFillString(last_recv->getVersion().getUserAgent(), 24).c_str());
+            addstr(_getFillString(last_recv->getVersion().getUserAgent(), 32).c_str());
             addstr(_getFillString(last_recv->getVersion().getBlockHeight(), 16).c_str());
             addstr(_getFillString(last_recv->getHeader().getCommand(), 16).c_str());
             addstr(last_recv->getHeadBody().c_str());

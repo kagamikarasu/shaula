@@ -18,6 +18,7 @@ Client::Client(boost::asio::io_context &io_context, boost::asio::ip::address_v6 
 }
 
 void Client::run(){
+    addListener();
     boost::asio::spawn(io_context_, [this](auto && PH1) { _run(std::forward<decltype(PH1)>(PH1)); });
 }
 

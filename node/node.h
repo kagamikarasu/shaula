@@ -73,7 +73,7 @@ protected:
     /**
      * Listener List
      */
-    std::vector<std::shared_ptr<ListenerIF>> listeners_;
+    std::vector<std::unique_ptr<ListenerIF>> listeners_;
 
 public:
 
