@@ -32,6 +32,7 @@ private:
      */
     std::unique_ptr<Version> version_;
 public:
+    LastRecv() = default;
 
     /**
      * Set Version
@@ -68,6 +69,12 @@ public:
      * @return
      */
     std::string getHeadBody();
+
+    /**
+     * Check if you have a header.
+     * @return
+     */
+    bool hasHeader();
 };
 
 #endif //SHAULA_LAST_RECV_H

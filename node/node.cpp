@@ -18,7 +18,7 @@ Node::Node(boost::asio::io_context &io_context) :
         receive_buffer_(boost::asio::streambuf(2048000)),
         socket_(io_context),
         timeout_(io_context),
-        last_recv_(std::make_shared<LastRecv>()){
+        last_recv_(){
 }
 
 std::unique_ptr<Header> Node::getHeader(const boost::asio::yield_context &yield){
@@ -87,14 +87,19 @@ void Node::close(){
     socket_.close();
 }
 
-std::weak_ptr<LastRecv> Node::getLastRecv() {
+LastRecv& Node::getLastRecv() {
     return last_recv_;
 }
 
+NodeStruct Node::getStruct(){
+    return {io_context_, socket_, timeout_};
+}
+
 void Node::addListener() {
-    NodeStruct f = {io_context_, socket_, timeout_};
-    listeners_.push_back(std::make_unique<ListenerVersion>(f, *last_recv_));
-    listeners_.push_back(std::make_unique<ListenerVerack>(f, *last_recv_));
-    listeners_.push_back(std::make_unique<ListenerAddr>(f, *last_recv_));
-    listeners_.push_back(std::make_unique<ListenerPing>(f, *last_recv_));
+    NodeStruct f = getStruct();
+    LastRecv& lr = getLastRecv();
+    listeners_.push_back(std::make_unique<ListenerVersion>(f, lr));
+    listeners_.push_back(std::make_unique<ListenerVerack>(f, lr));
+    listeners_.push_back(std::make_unique<ListenerAddr>(f, lr));
+    listeners_.push_back(std::make_unique<ListenerPing>(f, lr));
 }

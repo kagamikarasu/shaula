@@ -71,13 +71,13 @@ void Display::_clientConnectionList(){
         addstr(_getFillString(v.second->getRunThreadId(), 16).c_str());
         addstr(_getFillString(v.first, 24).c_str());
 
-        std::shared_ptr<LastRecv> last_recv = v.second->getLastRecv().lock();
+        LastRecv& last_recv = v.second->getLastRecv();
 
-        if(!last_recv->getHeadBody().empty()) {
-            addstr(_getFillString(last_recv->getVersion().getUserAgent(), 32).c_str());
-            addstr(_getFillString(last_recv->getVersion().getBlockHeight(), 16).c_str());
-            addstr(_getFillString(last_recv->getHeader().getCommand(), 16).c_str());
-            addstr(last_recv->getHeadBody().c_str());
+        if(!last_recv.getHeadBody().empty()) {
+            addstr(_getFillString(last_recv.getVersion().getUserAgent(), 32).c_str());
+            addstr(_getFillString(last_recv.getVersion().getBlockHeight(), 16).c_str());
+            addstr(_getFillString(last_recv.getHeader().getCommand(), 16).c_str());
+            addstr(last_recv.getHeadBody().c_str());
         }
         addstr("\n");
     }

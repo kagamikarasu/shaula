@@ -22,11 +22,11 @@ void LastRecv::setHeadBody(const std::vector<unsigned char> &bytes){
     head_body_ = Decode::toHexUpperString(bytes);
 }
 
-Version &LastRecv::getVersion() {
+Version& LastRecv::getVersion() {
     return *version_;
 }
 
-Header &LastRecv::getHeader() {
+Header& LastRecv::getHeader() {
     return *header_;
 }
 
@@ -34,4 +34,9 @@ std::string LastRecv::getHeadBody() {
     return head_body_;
 }
 
-
+bool LastRecv::hasHeader(){
+    if(header_ == nullptr){
+        return false;
+    }
+    return true;
+}

@@ -68,7 +68,7 @@ protected:
     /**
      * Last received Version Message.
      */
-    std::shared_ptr<LastRecv> last_recv_;
+    LastRecv last_recv_;
 
     /**
      * Listener List
@@ -78,10 +78,16 @@ protected:
 public:
 
     /**
-     * Return the last received Version.
+     * Return the last received.
      * @return
      */
-    std::weak_ptr<LastRecv> getLastRecv();
+    LastRecv& getLastRecv();
+
+    /**
+     * Return the Struct.
+     * @return
+     */
+    NodeStruct getStruct();
 
     /**
      * Returns the thread ID that this node is currently running on.

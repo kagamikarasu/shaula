@@ -44,7 +44,7 @@ void Client::_connect(const boost::asio::yield_context &yield){
     timeout_.expires_from_now(boost::posix_time::seconds(7));
     timeout_.async_wait([this](const boost::system::error_code &ec) {
         // An error occurs if you cancel.(timeout)
-        if (!ec || (&last_recv_->getHeader()) == nullptr) {
+        if (!ec || !last_recv_.hasHeader()) {
             Client::close();
             return;
         }
@@ -63,20 +63,20 @@ void Client::_receive(const boost::asio::yield_context& yield){
     std::vector<unsigned char> body;
     // Receive
     try {
-        last_recv_->setHeader(*getHeader(yield));
-        body = getBody(yield, last_recv_->getHeader());
+        last_recv_.setHeader(*getHeader(yield));
+        body = getBody(yield, last_recv_.getHeader());
     }catch(std::exception& e){
         return;
     }
 
     // Listener
     for(const auto& gl : listeners_){
-        gl->executor(last_recv_->getHeader(), body, yield);
+        gl->executor(last_recv_.getHeader(), body, yield);
     }
 
     // Store the first byte for browsing.
-    std::unique_ptr body_ptr = std::make_unique<Message>(last_recv_->getHeader(), body);
-    last_recv_->setHeadBody(body_ptr->getBodyHeadBytes());
+    std::unique_ptr body_ptr = std::make_unique<Message>(last_recv_.getHeader(), body);
+    last_recv_.setHeadBody(body_ptr->getBodyHeadBytes());
 
     _receive(yield);
 }
