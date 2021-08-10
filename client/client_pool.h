@@ -11,9 +11,13 @@
 #ifndef SHAULA_CLIENT_POOL_H
 #define SHAULA_CLIENT_POOL_H
 
+#include <unordered_map>
 #include "resolver.h"
 #include "client.h"
-#include <unordered_map>
+#include <node/listener/listener_version.h>
+#include <node/listener/listener_verack.h>
+#include <node/listener/listener_ping.h>
+#include <node/listener/listener_addr.h>
 
 /**
  * Singleton class for connection management
@@ -143,6 +147,12 @@ private:
      * @param address
      */
     void _removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
+
+    /**
+     * Assign a default listener
+     * @param c
+     */
+    static void _addListeners(Client &c);
 };
 
 

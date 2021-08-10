@@ -95,6 +95,11 @@ public:
     std::string getRunThreadId();
 
     /**
+     * Add Listener
+     */
+    void addListener(std::vector<std::unique_ptr<ListenerIF>> &listener);
+
+    /**
      * Check if the socket is open.
      * @return
      */
@@ -127,11 +132,6 @@ protected:
      * @return
      */
     std::vector<unsigned char> getBody(const boost::asio::yield_context &yield, Header &header);
-
-    /**
-     * Add Listener
-     */
-    void addListener();
 
     /**
      * Set Local Address & Remote Address

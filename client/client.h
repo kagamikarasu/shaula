@@ -36,7 +36,7 @@ public:
      * @param address
      * @param port
      */
-    explicit Client(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port);
+    explicit Client(boost::asio::io_context &io_context, boost::asio::ip::address_v6 address, uint16_t port);
 
     /**
      * Start a new coroutine and make a connection.
