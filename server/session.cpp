@@ -24,7 +24,9 @@ void Session::accept(const boost::asio::yield_context &yield){
     setRunThreadId();
 
     acceptor_.async_accept(socket_, yield);
-    setAddr();
+
+    endpoint_.set(socket_);
+
     receive(yield);
 }
 

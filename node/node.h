@@ -134,12 +134,6 @@ protected:
     std::vector<unsigned char> getBody(const boost::asio::yield_context &yield, Header &header);
 
     /**
-     * Set Local Address & Remote Address
-     * For Version/GetAddr...etc
-     */
-    void setAddr();
-
-    /**
      * Set tun threadId
      */
     void setRunThreadId();
