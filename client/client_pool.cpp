@@ -57,7 +57,7 @@ void ClientPool::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_c
 
     // Make sure to place at least one in a thread.
     for(int t = 0 ; t < number_of_thread_ ; ++t){
-        std::shared_ptr<boost::asio::io_context> io_context = std::make_shared<boost::asio::io_context>();
+        std::shared_ptr<boost::asio::io_context> io_context = std::move(std::make_unique<boost::asio::io_context>());
         io_contexts.push_back(io_context);
     }
 
@@ -110,8 +110,7 @@ void ClientPool::_pullUp(boost::asio::io_context &io_context) {
 void ClientPool::_addCPool(boost::asio::io_context &io_context,
                            const boost::asio::ip::address_v6 &address,
                            uint16_t port){
-
-    auto c = std::make_shared<Client>(io_context, address, port);
+    std::shared_ptr<Client> c = std::move(std::make_unique<Client>(io_context, address, port));
     _addListeners(*c);
 
     c->run();

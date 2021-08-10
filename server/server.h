@@ -28,7 +28,7 @@ private:
     /**
      * Acceptor
      */
-    std::shared_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
+    std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor_;
 
     /**
      * Vector with multiple connections
