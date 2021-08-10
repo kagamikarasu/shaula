@@ -55,7 +55,7 @@ void Client::_connect(const boost::asio::yield_context &yield){
     // Receiver
     boost::asio::spawn(io_context_, [this](auto && PH1) { _receive(std::forward<decltype(PH1)>(PH1)); });
 
-    setAddr();
+    endpoint_.set(socket_);
 }
 
 void Client::_receive(const boost::asio::yield_context& yield){
