@@ -30,7 +30,9 @@ void Server::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_conte
 
     // Number of simultaneous connections
     for(int i= 0 ; i < max_connections_ ; ++i){
-        server->sessions_.push_back(std::make_shared<Session>(*server->context_server_, *server->acceptor_));
+        std::shared_ptr<Session> session = std::move(
+                std::make_unique<Session>(*server->context_server_, *server->acceptor_));
+        server->sessions_.push_back(session);
     }
     // Number of Threads
     for(int i= 0 ; i < number_of_thread_ ; ++i){
