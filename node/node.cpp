@@ -7,10 +7,7 @@
 // See the following LICENSE file
 // https://github.com/kagamikarasu/shaula/
 //
-#include <node/listener/listener_version.h>
-#include <node/listener/listener_verack.h>
-#include <node/listener/listener_addr.h>
-#include <node/listener/listener_ping.h>
+#include <node/listener/listener_if.h>
 #include "node.h"
 
 Node::Node(boost::asio::io_context &io_context) :
@@ -95,11 +92,6 @@ NodeStruct Node::getStruct(){
     return {io_context_, socket_, timeout_};
 }
 
-void Node::addListener() {
-    NodeStruct f = getStruct();
-    LastRecv& lr = getLastRecv();
-    listeners_.push_back(std::make_unique<ListenerVersion>(f, lr));
-    listeners_.push_back(std::make_unique<ListenerVerack>(f, lr));
-    listeners_.push_back(std::make_unique<ListenerAddr>(f, lr));
-    listeners_.push_back(std::make_unique<ListenerPing>(f, lr));
+void Node::addListener(std::vector<std::unique_ptr<ListenerIF>> &listener) {
+    listeners_ = std::move(listener);
 }

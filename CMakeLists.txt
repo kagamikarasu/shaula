@@ -23,6 +23,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE observer server client)
 
 # test
 enable_testing()
-add_executable(test_cardinal test/test_cardinal.cpp)
+add_executable(test_cardinal test/cardinal/test_cardinal.cpp)
+add_executable(test_client test/client/test_client.cpp)
+
 target_link_libraries(test_cardinal PRIVATE cardinal)
-add_test(NAME run_test_cardinal COMMAND test_server)
+target_link_libraries(test_client PRIVATE server client)
+
+add_test(NAME test_cardinal COMMAND test_cardinal)
+add_test(NAME test_client COMMAND test_client)

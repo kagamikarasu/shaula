@@ -53,18 +53,17 @@ void ClientPool::add(boost::asio::io_context &io_context, const std::vector<NetA
 }
 
 void ClientPool::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_contexts){
-    ClientPool* clientPool = getInstance();
     size_t cs_io_ctx = io_contexts.size();
 
     // Make sure to place at least one in a thread.
     for(int t = 0 ; t < number_of_thread_ ; ++t){
-        std::shared_ptr<boost::asio::io_context> io_context = std::make_shared<boost::asio::io_context>();
+        std::shared_ptr<boost::asio::io_context> io_context = std::move(std::make_unique<boost::asio::io_context>());
         io_contexts.push_back(io_context);
     }
 
     // Only io_context created by this
     for (; cs_io_ctx < io_contexts.size(); ++cs_io_ctx) {
-        clientPool->_pullUp(*io_contexts.at(cs_io_ctx));
+        resize(*io_contexts.at(cs_io_ctx));
     }
 }
 
@@ -88,16 +87,6 @@ void ClientPool::_addUPool(const std::string &address, uint16_t port){
     unused_pool_.insert(std::make_pair( address, port));
 }
 
-void ClientPool::_addCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address, uint16_t port){
-    connection_pool_.insert(std::make_pair(address.to_string(), std::make_shared<Client>(io_context, address, port)));
-    connection_pool_.at(address.to_string())->run();
-
-    if(!thread_connection_manager_.contains(&io_context)){
-        thread_connection_manager_.insert(std::make_pair(&io_context, 0));
-    }
-    ++thread_connection_manager_.at(&io_context);
-}
-
 void ClientPool::_pullUp(boost::asio::io_context &io_context) {
 
     for(int cpt = 0 ; cpt < client_per_thread ; ++cpt) {
@@ -116,6 +105,37 @@ void ClientPool::_pullUp(boost::asio::io_context &io_context) {
 
         unused_pool_.erase(itb);
     }
+}
+
+void ClientPool::_addCPool(boost::asio::io_context &io_context,
+                           const boost::asio::ip::address_v6 &address,
+                           uint16_t port){
+    std::shared_ptr<Client> c = std::move(std::make_unique<Client>(io_context, address, port));
+    _addListeners(*c);
+
+    c->run();
+
+    // Key::Address + Value::Client
+    connection_pool_.insert(std::make_pair(address.to_string(), c));
+
+    if(!thread_connection_manager_.contains(&io_context)){
+        thread_connection_manager_.insert(std::make_pair(&io_context, 0));
+    }
+    ++thread_connection_manager_.at(&io_context);
+}
+
+void ClientPool::_addListeners(Client& c){
+    std::vector<std::unique_ptr<ListenerIF>> listeners;
+
+    NodeStruct f = c.getStruct();
+    LastRecv& lr = c.getLastRecv();
+
+    listeners.push_back(std::make_unique<ListenerVersion>(f, lr));
+    listeners.push_back(std::make_unique<ListenerVerack>(f, lr));
+    listeners.push_back(std::make_unique<ListenerAddr>(f, lr));
+    listeners.push_back(std::make_unique<ListenerPing>(f, lr));
+
+    c.addListener(listeners);
 }
 
 void ClientPool::_removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
