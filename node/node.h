@@ -30,6 +30,11 @@
 #include "message/mempool.h"
 #include "message/header.h"
 #include "listener/listener_if.h"
+#include "listener/listener_version.h"
+#include "listener/listener_verack.h"
+#include "listener/listener_ping.h"
+#include "listener/listener_addr.h"
+
 
 class Node {
 private:

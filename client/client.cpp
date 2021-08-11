@@ -44,7 +44,7 @@ void Client::_connect(const boost::asio::yield_context &yield){
     timeout_.async_wait([this](const boost::system::error_code &ec) {
         // An error occurs if you cancel.(timeout)
         if (!ec || !last_recv_.hasHeader()) {
-            Client::close();
+            this->close();
             return;
         }
     });

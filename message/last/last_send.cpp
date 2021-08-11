@@ -16,3 +16,22 @@ void LastSend::setHeader(const Header& header) {
 Header &LastSend::getHeader() {
     return *header_;
 }
+
+bool LastSend::hasHeader(){
+    if(header_ == nullptr){
+        return false;
+    }
+    return true;
+}
+
+void LastSend::enableVerack() {
+    isAlreadyVerack = true;
+}
+
+void LastSend::disableVerack() {
+    isAlreadyVerack = false;
+}
+
+bool LastSend::isEnableVerack() {
+    return isAlreadyVerack;
+}

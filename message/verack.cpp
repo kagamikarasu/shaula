@@ -21,5 +21,6 @@ void Verack::send(
     auto v = std::make_unique<Verack>();
     v->sendMessage(socket, yield);
 
+    last_send.disableVerack();
     last_send.setHeader(v->getHeader());
 }

@@ -19,6 +19,15 @@ private:
      */
     std::unique_ptr<Header> header_;
 
+    /**
+     * True: implement the Verack response.
+     * False: do not perform the Verack response.
+     *
+     * Enable after sending the Version Message.
+     * Disable the Verack Message after receiving it.
+     */
+    bool isAlreadyVerack = false;
+
 public:
     /**
      * Set Header
@@ -31,6 +40,28 @@ public:
      * @return
      */
     Header& getHeader();
+
+    /**
+     * Enable after sending the Version Message.
+     */
+    void enableVerack();
+
+    /**
+     * Disable the Verack Message after receiving it.
+     */
+    void disableVerack();
+
+    /**
+     * Returns the current state.
+     * @return
+     */
+    bool isEnableVerack();
+
+    /**
+     * Check header pointer
+     * @return
+     */
+    bool hasHeader();
 };
 
 

@@ -171,5 +171,6 @@ void Version::send(boost::asio::ip::tcp::socket &socket,
     auto v = std::make_unique<Version>(endpoint);
     v->sendMessage(socket, yield);
 
+    last_send.enableVerack();
     last_send.setHeader(v->getHeader());
 }

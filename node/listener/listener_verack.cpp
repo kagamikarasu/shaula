@@ -17,6 +17,10 @@ ListenerVerack::executor(Header &header, std::vector<unsigned char> &body, const
         return;
     }
 
+    if(!last_send_.isEnableVerack()){
+        return;
+    }
+
     Verack::send(socket_, yield, last_send_);
     GetAddr::send(socket_, yield, last_send_);
 }

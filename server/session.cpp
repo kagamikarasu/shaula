@@ -43,22 +43,12 @@ void Session::receive(const boost::asio::yield_context &yield){
         return;
     }
 
-    // version
-    if(header->isVersion()){
-        Version::send(socket_, yield, last_send_, endpoint_);
-        Verack::send(socket_, yield, last_send_);
-        Ping::send(socket_, yield, last_send_);
+    // Listener
+    for(const auto& gl : listeners_){
+        gl->executor(*header, body, yield);
     }
 
-    // getaddr
-    if(header->isGetAddr()){
-
-    }
-
-    // Mempool
-    if(header->isMempool()){
-
-    }
+    last_recv_.setHeader(*header);
 
     receive(yield);
 }
