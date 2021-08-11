@@ -7,7 +7,6 @@
 // See the following LICENSE file
 // https://github.com/kagamikarasu/shaula/
 //
-#include <node/listener/listener_if.h>
 #include "node.h"
 
 Node::Node(boost::asio::io_context &io_context) :
@@ -70,7 +69,7 @@ LastRecv& Node::getLastRecv() {
 }
 
 NodeStruct Node::getStruct(){
-    return {io_context_, socket_, timeout_};
+    return {io_context_, socket_, timeout_, endpoint_, last_send_, last_recv_};
 }
 
 void Node::addListener(std::vector<std::unique_ptr<ListenerIF>> &listener) {

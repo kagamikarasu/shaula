@@ -32,12 +32,26 @@ void Server::run(std::vector<std::shared_ptr<boost::asio::io_context>> &io_conte
     for(int i= 0 ; i < max_connections_ ; ++i){
         std::shared_ptr<Session> session = std::move(
                 std::make_unique<Session>(*server->context_server_, *server->acceptor_));
+        _addListeners(*session);
         server->sessions_.push_back(session);
     }
     // Number of Threads
     for(int i= 0 ; i < number_of_thread_ ; ++i){
         io_contexts.push_back(server->context_server_);
     }
+}
+
+void Server::_addListeners(Session& c){
+    std::vector<std::unique_ptr<ListenerIF>> listeners;
+
+    NodeStruct ns = c.getStruct();
+
+    listeners.push_back(std::make_unique<ListenerVersion>(ns));
+    listeners.push_back(std::make_unique<ListenerVerack>(ns));
+    listeners.push_back(std::make_unique<ListenerAddr>(ns));
+    listeners.push_back(std::make_unique<ListenerPing>(ns));
+
+    c.addListener(listeners);
 }
 
 std::vector<Session*> Server::getConnectionList() {

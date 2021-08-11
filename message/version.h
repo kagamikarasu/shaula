@@ -116,9 +116,14 @@ public:
      * Asynchronous Transfer
      * @param socket
      * @param yield
+     * @param last_send
      * @param endpoint
      */
-    static void send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield, const Endpoint &endpoint);
+    static void send(
+            boost::asio::ip::tcp::socket &socket,
+            const boost::asio::yield_context &yield,
+            LastSend& last_send,
+            const Endpoint &endpoint);
 
 private:
     /**

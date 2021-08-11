@@ -127,13 +127,12 @@ void ClientPool::_addCPool(boost::asio::io_context &io_context,
 void ClientPool::_addListeners(Client& c){
     std::vector<std::unique_ptr<ListenerIF>> listeners;
 
-    NodeStruct f = c.getStruct();
-    LastRecv& lr = c.getLastRecv();
+    NodeStruct ns = c.getStruct();
 
-    listeners.push_back(std::make_unique<ListenerVersion>(f, lr));
-    listeners.push_back(std::make_unique<ListenerVerack>(f, lr));
-    listeners.push_back(std::make_unique<ListenerAddr>(f, lr));
-    listeners.push_back(std::make_unique<ListenerPing>(f, lr));
+    listeners.push_back(std::make_unique<ListenerVersion>(ns));
+    listeners.push_back(std::make_unique<ListenerVerack>(ns));
+    listeners.push_back(std::make_unique<ListenerAddr>(ns));
+    listeners.push_back(std::make_unique<ListenerPing>(ns));
 
     c.addListener(listeners);
 }

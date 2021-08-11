@@ -15,12 +15,8 @@
 class ListenerVerack : public ListenerIF {
 public:
     ListenerVerack(
-            NodeStruct &node_struct,
-            LastRecv &last_recv) :
-            ListenerIF(node_struct,
-                       last_recv
-                       ){
-
+            NodeStruct &node_struct) :
+            ListenerIF(node_struct){
     }
 
     void executor(Header &header, std::vector<unsigned char> &body, const boost::asio::yield_context &yield) override;

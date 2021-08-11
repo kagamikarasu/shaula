@@ -14,6 +14,12 @@ GetAddr::GetAddr(){
     setCommand(CommandDef.GETADDR);
 }
 
-void GetAddr::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield) {
-    (std::make_unique<GetAddr>())->sendMessage(socket, yield);
+void GetAddr::send(
+        boost::asio::ip::tcp::socket &socket,
+        const boost::asio::yield_context &yield,
+        LastSend& last_send) {
+    auto v = std::make_unique<GetAddr>();
+    v->sendMessage(socket, yield);
+
+    last_send.setHeader(v->getHeader());
 }

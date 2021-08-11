@@ -14,10 +14,6 @@
 #include <unordered_map>
 #include "resolver.h"
 #include "client.h"
-#include <node/listener/listener_version.h>
-#include <node/listener/listener_verack.h>
-#include <node/listener/listener_ping.h>
-#include <node/listener/listener_addr.h>
 
 /**
  * Singleton class for connection management

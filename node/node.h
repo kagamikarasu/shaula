@@ -29,8 +29,12 @@
 #include "message/pong.h"
 #include "message/mempool.h"
 #include "message/header.h"
-#include "last_recv.h"
 #include "listener/listener_if.h"
+#include "listener/listener_version.h"
+#include "listener/listener_verack.h"
+#include "listener/listener_ping.h"
+#include "listener/listener_addr.h"
+
 
 class Node {
 private:
@@ -66,9 +70,14 @@ protected:
     std::string run_thread_id_;
 
     /**
-     * Last received Version Message.
+     * Last send
      */
-    LastRecv last_recv_;
+    LastSend last_send_;
+
+    /**
+     * Last received
+     */
+    LastRecv last_recv_{};
 
     /**
      * Listener List

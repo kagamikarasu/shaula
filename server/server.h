@@ -71,6 +71,11 @@ private:
      */
     Server();
 
+    /**
+     * Add Listener.
+     * @param c
+     */
+    static void _addListeners(Session &c);
 };
 
 

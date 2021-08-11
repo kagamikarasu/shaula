@@ -11,7 +11,7 @@
 #include <boost/asio/write.hpp>
 #include "message.h"
 
-Message::Message() : header_(std::make_unique<Header>()){
+Message::Message() : header_(*std::make_unique<Header>()){
 }
 
 Message::Message(const Header &header, const std::vector<unsigned char> &body) {
@@ -20,7 +20,7 @@ Message::Message(const Header &header, const std::vector<unsigned char> &body) {
 }
 
 void Message::setHeader(const Header &header) {
-    header_ = std::make_unique<Header>(header);
+    header_ = *std::make_unique<Header>(header);
 }
 
 void Message::setPayload(const std::vector<unsigned char> &bytes) {
@@ -28,12 +28,12 @@ void Message::setPayload(const std::vector<unsigned char> &bytes) {
 }
 
 void Message::setCommand(const char* &command) {
-    header_->setCommand(command);
+    header_.setCommand(command);
 }
 
 void Message::setLength(){
     uint32_t size = payload_.size();
-    header_->setPayloadLength(size);
+    header_.setPayloadLength(size);
 }
 
 void Message::setChecksum(){
@@ -42,7 +42,11 @@ void Message::setChecksum(){
     for(int i = 0 ; i < HeaderSize.payload_checksum ; i++){
         checksum.push_back(sha256d[i]);
     }
-    header_->setPayloadChecksum(checksum);
+    header_.setPayloadChecksum(checksum);
+}
+
+Header& Message::getHeader(){
+    return header_;
 }
 
 std::vector<unsigned char> Message::getMessage() {
@@ -52,7 +56,7 @@ std::vector<unsigned char> Message::getMessage() {
     setChecksum();
 
     // Set Header
-    auto header = header_->getHex();
+    auto header = header_.getHex();
     message.insert(message.end(), header.begin(), header.end());
 
     // Set Payload

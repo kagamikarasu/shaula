@@ -31,34 +31,24 @@ void Session::accept(const boost::asio::yield_context &yield){
 }
 
 void Session::receive(const boost::asio::yield_context &yield){
-    std::unique_ptr<Header> header;
+    std::shared_ptr<Header> header;
     std::vector<unsigned char> body;
 
     // Receive
     try {
-        header = getHeader(yield);
-        body = getBody(yield, *header);
+        header = std::move(getHeader(yield));
+        body = std::move(getBody(yield, *header));
     }catch(std::exception& e){
         this->close();
         return;
     }
 
-    // version
-    if(header->isVersion()){
-        Version::send(socket_, yield, endpoint_);
-        Verack::send(socket_, yield);
-        Ping::send(socket_, yield);
+    // Listener
+    for(const auto& gl : listeners_){
+        gl->executor(*header, body, yield);
     }
 
-    // getaddr
-    if(header->isGetAddr()){
-
-    }
-
-    // Mempool
-    if(header->isMempool()){
-
-    }
+    last_recv_.setHeader(*header);
 
     receive(yield);
 }

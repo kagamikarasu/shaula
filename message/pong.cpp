@@ -29,7 +29,14 @@ std::vector<unsigned char> Pong::getMessage() {
     return Message::getMessage();
 }
 
-void Pong::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield,
-                const std::vector<unsigned char> &bytes) {
-    (std::make_unique<Pong>(bytes))->sendMessage(socket, yield);
+void Pong::send(
+        boost::asio::ip::tcp::socket &socket,
+        const boost::asio::yield_context &yield,
+        LastSend& last_send,
+        const std::vector<unsigned char> &bytes) {
+
+    auto v = std::make_unique<Pong>(bytes);
+    v->sendMessage(socket, yield);
+
+    last_send.setHeader(v->getHeader());
 }
