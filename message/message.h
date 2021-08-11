@@ -36,7 +36,7 @@ private:
      * Only Command is operable.
      * Please check setCommand().
      */
-    std::unique_ptr<Header> header_;
+    Header header_;
 
     /**
      * Payload (std::vector<unsigned>)

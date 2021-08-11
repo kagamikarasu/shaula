@@ -14,8 +14,8 @@ void LastRecv::setVersion(const std::vector<unsigned char> &body){
     version_ = std::make_unique<Version>(body);
 }
 
-void LastRecv::setHeader(const Header& header){
-    header_ = std::make_unique<Header>(header);
+void LastRecv::setHeader(const std::weak_ptr<Header>& header){
+    header_ = header;
 }
 
 void LastRecv::setHeadBody(const std::vector<unsigned char> &bytes){
@@ -27,7 +27,7 @@ Version& LastRecv::getVersion() {
 }
 
 Header& LastRecv::getHeader() {
-    return *header_;
+    return *header_.lock();
 }
 
 std::string LastRecv::getHeadBody() {
@@ -35,7 +35,7 @@ std::string LastRecv::getHeadBody() {
 }
 
 bool LastRecv::hasHeader(){
-    if(header_ == nullptr){
+    if(header_.lock() == nullptr){
         return false;
     }
     return true;

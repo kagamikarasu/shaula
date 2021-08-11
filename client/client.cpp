@@ -59,22 +59,25 @@ void Client::_connect(const boost::asio::yield_context &yield){
 }
 
 void Client::_receive(const boost::asio::yield_context& yield){
+    std::shared_ptr<Header> header;
     std::vector<unsigned char> body;
     // Receive
     try {
-        last_recv_.setHeader(*getHeader(yield));
-        body = getBody(yield, last_recv_.getHeader());
+        header = std::move(getHeader(yield));
+        body = std::move(getBody(yield, *header));
     }catch(std::exception& e){
         return;
     }
 
     // Listener
     for(const auto& gl : listeners_){
-        gl->executor(last_recv_.getHeader(), body, yield);
+        gl->executor(*header, body, yield);
     }
 
+    last_recv_.setHeader(header);
+
     // Store the first byte for browsing.
-    std::unique_ptr body_ptr = std::make_unique<Message>(last_recv_.getHeader(), body);
+    std::unique_ptr body_ptr = std::make_unique<Message>(*header, body);
     last_recv_.setHeadBody(body_ptr->getBodyHeadBytes());
 
     _receive(yield);

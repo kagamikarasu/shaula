@@ -20,7 +20,7 @@ private:
     /**
      * LastRecv Header
      */
-    std::unique_ptr<Header> header_;
+    std::weak_ptr<Header> header_;
 
     /**
      * LastRecv Head Body
@@ -44,7 +44,7 @@ public:
      * Set Header
      * @param header
      */
-    void setHeader(const Header& header);
+    void setHeader(const std::weak_ptr<Header> &header);
 
     /**
      * Set HeadBody(to HEX String)
@@ -75,6 +75,7 @@ public:
      * @return
      */
     bool hasHeader();
+
 };
 
 #endif //SHAULA_LAST_RECV_H
