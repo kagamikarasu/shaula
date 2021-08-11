@@ -18,17 +18,17 @@
 class LastRecv{
 private:
     /**
-     *
+     * LastRecv Header
      */
     std::unique_ptr<Header> header_;
 
     /**
-     *
+     * LastRecv Head Body
      */
     std::string head_body_;
 
     /**
-     *
+     * LastRecv Version Message
      */
     std::unique_ptr<Version> version_;
 public:
