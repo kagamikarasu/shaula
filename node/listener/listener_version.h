@@ -12,6 +12,8 @@
 
 
 #include "listener_if.h"
+#include "message/verack.h"
+#include "message/ping.h"
 
 class ListenerVersion : public ListenerIF{
 public:

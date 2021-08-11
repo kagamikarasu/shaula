@@ -16,7 +16,7 @@ void ListenerPing::executor(Header &header, std::vector<unsigned char> &body, co
         return;
     }
 
-    Pong::send(socket_, yield, std::make_unique<Ping>(body)->getNonce());
+    Pong::send(socket_, yield, last_send_, std::make_unique<Ping>(body)->getNonce());
 }
 
 bool ListenerPing::isApply(Header &header) {

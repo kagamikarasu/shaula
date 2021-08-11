@@ -7,7 +7,6 @@
 // See the following LICENSE file
 // https://github.com/kagamikarasu/shaula/
 //
-#include <node/listener/listener_if.h>
 #include "node.h"
 
 Node::Node(boost::asio::io_context &io_context) :

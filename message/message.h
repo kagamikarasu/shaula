@@ -23,6 +23,7 @@
 #include "struct/net_addr.h"
 #include "struct/var_str.h"
 #include "struct/var_int.h"
+#include "last/last_send.h"
 
 /**
  * Message Class (Base)

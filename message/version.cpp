@@ -163,6 +163,13 @@ std::string Version::getBlockHeight(){
     return std::to_string(start_height_);
 }
 
-void Version::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield, const Endpoint &endpoint) {
-    (std::make_unique<Version>(endpoint))->sendMessage(socket, yield);
+void Version::send(boost::asio::ip::tcp::socket &socket,
+                   const boost::asio::yield_context &yield,
+                   LastSend& last_send,
+                   const Endpoint &endpoint) {
+
+    auto v = std::make_unique<Version>(endpoint);
+    v->sendMessage(socket, yield);
+
+    last_send.setHeader(v->getHeader());
 }

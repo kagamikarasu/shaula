@@ -45,9 +45,9 @@ void Session::receive(const boost::asio::yield_context &yield){
 
     // version
     if(header->isVersion()){
-        Version::send(socket_, yield, endpoint_);
-        Verack::send(socket_, yield);
-        Ping::send(socket_, yield);
+        Version::send(socket_, yield, last_send_, endpoint_);
+        Verack::send(socket_, yield, last_send_);
+        Ping::send(socket_, yield, last_send_);
     }
 
     // getaddr

@@ -72,7 +72,7 @@ protected:
     /**
      * Last received
      */
-    LastRecv last_recv_;
+    LastRecv last_recv_{};
 
     /**
      * Listener List

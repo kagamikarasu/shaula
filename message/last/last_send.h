@@ -10,7 +10,7 @@
 #ifndef SHAULA_LAST_SEND_H
 #define SHAULA_LAST_SEND_H
 
-#include <message/header.h>
+#include "message/header.h"
 
 class LastSend {
 private:

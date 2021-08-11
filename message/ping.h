@@ -53,7 +53,10 @@ public:
      * @param socket
      * @param yield
      */
-    static void send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield);
+    static void send(
+            boost::asio::ip::tcp::socket &socket,
+            const boost::asio::yield_context &yield,
+            LastSend& last_send);
 
 private:
     /**

@@ -16,6 +16,7 @@ void ListenerAddr::executor(Header &header, std::vector<unsigned char> &body, co
     }
 
     ClientPool::add(io_context_, std::make_unique<Addr>(body)->getAddrList());
+    ClientPool::resize(io_context_);
 }
 
 bool ListenerAddr::isApply(Header &header) {

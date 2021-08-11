@@ -10,7 +10,7 @@
 #ifndef SHAULA_LAST_RECV_H
 #define SHAULA_LAST_RECV_H
 
-#include <message/version.h>
+#include "message/version.h"
 
 /**
  * Class to manage the last received data.
@@ -20,7 +20,7 @@ private:
     /**
      * LastRecv Header
      */
-    std::weak_ptr<Header> header_;
+    std::unique_ptr<Header> header_;
 
     /**
      * LastRecv Head Body
@@ -44,7 +44,7 @@ public:
      * Set Header
      * @param header
      */
-    void setHeader(const std::weak_ptr<Header> &header);
+    void setHeader(const Header &header);
 
     /**
      * Set HeadBody(to HEX String)

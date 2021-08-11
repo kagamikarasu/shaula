@@ -10,9 +10,9 @@
 #ifndef SHAULA_LISTENER_IF_H
 #define SHAULA_LISTENER_IF_H
 
-#include <node/last_send.h>
-#include <node/last_recv.h>
-#include <node/node_struct.h>
+#include <message/last/last_send.h>
+#include <message/last/last_recv.h>
+#include "node/node_struct.h"
 
 class ListenerIF{
 protected:

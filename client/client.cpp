@@ -31,7 +31,7 @@ void Client::_run(const boost::asio::yield_context &yield){
         }
     }
 
-    Version::send(socket_, yield, endpoint_);
+    Version::send(socket_, yield, last_send_, endpoint_);
 }
 
 void Client::_connect(const boost::asio::yield_context &yield){
@@ -74,7 +74,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
         gl->executor(*header, body, yield);
     }
 
-    last_recv_.setHeader(header);
+    last_recv_.setHeader(*header);
 
     // Store the first byte for browsing.
     std::unique_ptr body_ptr = std::make_unique<Message>(*header, body);

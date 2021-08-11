@@ -41,6 +41,12 @@ std::vector<unsigned char> Ping::getNonce() {
     return nonce_;
 }
 
-void Ping::send(boost::asio::ip::tcp::socket &socket, const boost::asio::yield_context &yield){
-    (std::make_unique<Ping>())->sendMessage(socket, yield);
+void Ping::send(
+        boost::asio::ip::tcp::socket &socket,
+        const boost::asio::yield_context &yield,
+        LastSend& last_send){
+    auto v = std::make_unique<Ping>();
+    v->sendMessage(socket, yield);
+
+    last_send.setHeader(v->getHeader());
 }

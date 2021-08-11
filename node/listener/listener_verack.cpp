@@ -17,8 +17,8 @@ ListenerVerack::executor(Header &header, std::vector<unsigned char> &body, const
         return;
     }
 
-    Verack::send(socket_, yield);
-    GetAddr::send(socket_, yield);
+    Verack::send(socket_, yield, last_send_);
+    GetAddr::send(socket_, yield, last_send_);
 }
 
 bool ListenerVerack::isApply(Header &header) {
