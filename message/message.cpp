@@ -45,6 +45,10 @@ void Message::setChecksum(){
     header_->setPayloadChecksum(checksum);
 }
 
+Header& Message::getHeader(){
+    return *header_;
+}
+
 std::vector<unsigned char> Message::getMessage() {
     std::vector<unsigned char> message;
     // Payload Calc

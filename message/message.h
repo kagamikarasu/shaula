@@ -59,12 +59,22 @@ public:
     explicit Message(const Header &header, const std::vector<unsigned char> &body);
 
     /**
+     * Returning the header reference.
+     * @return
+     */
+    Header &getHeader();
+
+    /**
      * Obtain messages that can be sent to the network.
      * Header and payload are included.
      * @return
      */
     virtual std::vector<unsigned char> getMessage();
 
+    /**
+     * Return the top Hex of the Body.
+     * @return
+     */
     std::vector<unsigned char> getBodyHeadBytes();
 
 private:
