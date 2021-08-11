@@ -70,7 +70,7 @@ LastRecv& Node::getLastRecv() {
 }
 
 NodeStruct Node::getStruct(){
-    return {io_context_, socket_, timeout_};
+    return {io_context_, socket_, timeout_, endpoint_, last_send_, last_recv_};
 }
 
 void Node::addListener(std::vector<std::unique_ptr<ListenerIF>> &listener) {

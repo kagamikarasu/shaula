@@ -16,11 +16,8 @@
 class ListenerVersion : public ListenerIF{
 public:
     ListenerVersion(
-            NodeStruct &node_struct,
-            LastRecv &last_recv) :
-            ListenerIF(node_struct,
-                       last_recv
-                       ){
+            NodeStruct &node_struct) :
+            ListenerIF(node_struct){
 
     }
 

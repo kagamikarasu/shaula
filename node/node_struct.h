@@ -16,6 +16,11 @@ struct NodeStruct {
     boost::asio::io_context& io_context_;
     boost::asio::ip::tcp::socket& socket_;
     boost::asio::deadline_timer& timeout_;
+
+    Endpoint& endpoint_;
+
+    LastSend& last_send_;
+    LastRecv& last_recv_;
 };
 
 #endif //SHAULA_NODE_STRUCT_H

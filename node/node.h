@@ -29,7 +29,6 @@
 #include "message/pong.h"
 #include "message/mempool.h"
 #include "message/header.h"
-#include "last_recv.h"
 #include "listener/listener_if.h"
 
 class Node {
@@ -66,7 +65,12 @@ protected:
     std::string run_thread_id_;
 
     /**
-     * Last received Version Message.
+     * Last send
+     */
+    LastSend last_send_;
+
+    /**
+     * Last received
      */
     LastRecv last_recv_;
 

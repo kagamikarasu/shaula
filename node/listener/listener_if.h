@@ -10,6 +10,7 @@
 #ifndef SHAULA_LISTENER_IF_H
 #define SHAULA_LISTENER_IF_H
 
+#include <node/last_send.h>
 #include <node/last_recv.h>
 #include <node/node_struct.h>
 
@@ -31,6 +32,16 @@ protected:
     boost::asio::deadline_timer& timeout_;
 
     /**
+     * Endpoint
+     */
+    Endpoint& endpoint_;
+
+    /**
+     * LastSend Data
+     */
+    LastSend& last_send_;
+
+    /**
      * LastReceive Data
      */
     LastRecv& last_recv_;
@@ -38,15 +49,15 @@ public:
     /**
      *
      * @param node_struct_
-     * @param last_recv
      */
-    ListenerIF(
-            NodeStruct &node_struct_,
-            LastRecv &last_recv) :
+    explicit ListenerIF(
+            NodeStruct &node_struct_) :
             io_context_(node_struct_.io_context_),
             socket_(node_struct_.socket_),
             timeout_(node_struct_.timeout_),
-            last_recv_(last_recv){
+            endpoint_(node_struct_.endpoint_),
+            last_send_(node_struct_.last_send_),
+            last_recv_(node_struct_.last_recv_){
     }
 
     /**
