@@ -20,15 +20,6 @@
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/thread.hpp>
 #include "cardinal/endpoint.h"
-#include "message/message.h"
-#include "message/version.h"
-#include "message/verack.h"
-#include "message/addr.h"
-#include "message/get_addr.h"
-#include "message/ping.h"
-#include "message/pong.h"
-#include "message/mempool.h"
-#include "message/header.h"
 #include "listener/listener_if.h"
 #include "listener/listener_version.h"
 #include "listener/listener_verack.h"
@@ -106,7 +97,7 @@ public:
     /**
      * Add Listener
      */
-    void addListener(std::vector<std::unique_ptr<ListenerIF>> &listener);
+    void addListener(std::unique_ptr<ListenerIF> listener);
 
     /**
      * Check if the socket is open.
@@ -146,6 +137,11 @@ protected:
      * Set tun threadId
      */
     void setRunThreadId();
+
+    /**
+     * Set DefaultListener
+     */
+    void setDefaultListener();
 };
 
 

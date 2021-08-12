@@ -70,12 +70,6 @@ private:
      * @param io_contexts
      */
     Server();
-
-    /**
-     * Add Listener.
-     * @param c
-     */
-    static void _addListeners(Session &c);
 };
 
 

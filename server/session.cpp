@@ -13,6 +13,7 @@
 Session::Session(boost::asio::io_context &ioContext, boost::asio::ip::tcp::acceptor &acceptor) :
     Node(ioContext),
     acceptor_(acceptor){
+    setDefaultListener();
     run();
 }
 
