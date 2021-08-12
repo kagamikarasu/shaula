@@ -18,10 +18,18 @@
  * Basically the same as the Client Class.
  */
 class Session : public Node{
+private:
     /**
      * Acceptor
      */
     boost::asio::ip::tcp::acceptor &acceptor_;
+public:
+    /**
+     * Flag to re-instate the standby state when disconnected.
+     * Default : True
+     * Use False when testing.
+     */
+     bool is_session_re_run_ = true;
 public:
     /**
      *

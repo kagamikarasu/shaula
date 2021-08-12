@@ -40,6 +40,10 @@ void Session::receive(const boost::asio::yield_context &yield){
         header = std::move(getHeader(yield));
         body = std::move(getBody(yield, *header));
     }catch(std::exception& e){
+        if(!is_session_re_run_){
+            Node::close();
+            return;
+        }
         Session::close();
         return;
     }
