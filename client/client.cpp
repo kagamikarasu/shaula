@@ -67,6 +67,7 @@ void Client::_receive(const boost::asio::yield_context& yield){
         header = std::move(getHeader(yield));
         body = std::move(getBody(yield, *header));
     }catch(std::exception& e){
+        timeout_.cancel();
         Client::close();
         return;
     }
