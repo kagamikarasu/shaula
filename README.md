@@ -40,9 +40,11 @@ make
 | Name    | URL                                   | Remarks                      |
 | --------- | --------------------------------------- | ------------------------------ |
 | Boost   | https://github.com/boostorg           | Network, Coroutines, Threads |
-| OpenSLL | https://github.com/openssl            | SHA256, RIPEMD-160, Random   |
-| Base58  | https://github.com/luke-jr/libbase58  | Base58                       |
+| OpenSLL | https://github.com/openssl            | SHA256, RIPEMD-160, Random   | |
 | Ncurses | https://invisible-island.net/ncurses/ | CUI Drawing                  |
+
+And we are using Base58.  
+(https://github.com/luke-jr/libbase58)
 
 ## Recommended Development Environment
 
