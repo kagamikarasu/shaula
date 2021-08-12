@@ -10,7 +10,7 @@
 #include "listener_version.h"
 
 void ListenerVersion::executor(Header &header, std::vector<unsigned char> &body, const boost::asio::yield_context &yield) {
-    if(!isApply(header)){
+    if(header.getCommand() != CommandDef.VERSION){
         return;
     }
 
@@ -24,11 +24,4 @@ void ListenerVersion::executor(Header &header, std::vector<unsigned char> &body,
     Version::send(socket_, yield, last_send_, endpoint_);
     Verack::send(socket_, yield, last_send_);
     Ping::send(socket_, yield, last_send_);
-}
-
-bool ListenerVersion::isApply(Header &header) {
-    if(header.getCommand() == CommandDef.VERSION){
-        return true;
-    }
-    return false;
 }

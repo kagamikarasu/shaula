@@ -13,7 +13,7 @@
 
 void
 ListenerVerack::executor(Header &header, std::vector<unsigned char> &body, const boost::asio::yield_context &yield) {
-    if(!isApply(header)){
+    if(header.getCommand() != CommandDef.VERACK){
         return;
     }
 
@@ -25,9 +25,3 @@ ListenerVerack::executor(Header &header, std::vector<unsigned char> &body, const
     GetAddr::send(socket_, yield, last_send_);
 }
 
-bool ListenerVerack::isApply(Header &header) {
-    if(header.getCommand() == CommandDef.VERACK){
-        return true;
-    }
-    return false;
-}

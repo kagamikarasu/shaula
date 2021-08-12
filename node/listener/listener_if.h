@@ -71,8 +71,6 @@ public:
             std::vector<unsigned char> &body,
             const boost::asio::yield_context &yield
             ) = 0;
-private:
-    virtual bool isApply(Header &header) = 0;
 };
 
 #endif //SHAULA_LISTENER_IF_H

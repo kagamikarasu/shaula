@@ -97,7 +97,7 @@ public:
     /**
      * Add Listener
      */
-    void addListener(std::vector<std::unique_ptr<ListenerIF>> &listener);
+    void addListener(std::unique_ptr<ListenerIF> listener);
 
     /**
      * Check if the socket is open.

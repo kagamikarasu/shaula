@@ -14,16 +14,13 @@
 
 class ListenerVerack : public ListenerIF {
 public:
-    ListenerVerack(
+    explicit ListenerVerack(
             NodeStruct &node_struct) :
             ListenerIF(node_struct){
     }
 
     void executor(Header &header, std::vector<unsigned char> &body, const boost::asio::yield_context &yield) override;
 
-private:
-    bool isApply(Header &header) override;
 };
-
 
 #endif //SHAULA_LISTENER_VERACK_H

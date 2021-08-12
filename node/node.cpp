@@ -81,6 +81,6 @@ void Node::setDefaultListener() {
     listeners_.push_back(std::make_unique<ListenerPing>(ns));
 }
 
-void Node::addListener(std::vector<std::unique_ptr<ListenerIF>> &listener) {
-    listeners_ = std::move(listener);
+void Node::addListener(std::unique_ptr<ListenerIF> listener) {
+    listeners_.push_back(std::move(listener));
 }
