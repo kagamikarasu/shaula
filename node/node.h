@@ -20,15 +20,6 @@
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/thread.hpp>
 #include "cardinal/endpoint.h"
-#include "message/message.h"
-#include "message/version.h"
-#include "message/verack.h"
-#include "message/addr.h"
-#include "message/get_addr.h"
-#include "message/ping.h"
-#include "message/pong.h"
-#include "message/mempool.h"
-#include "message/header.h"
 #include "listener/listener_if.h"
 #include "listener/listener_version.h"
 #include "listener/listener_verack.h"
@@ -146,6 +137,11 @@ protected:
      * Set tun threadId
      */
     void setRunThreadId();
+
+    /**
+     * Set DefaultListener
+     */
+    void setDefaultListener();
 };
 
 

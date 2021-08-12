@@ -15,6 +15,7 @@ Client::Client(boost::asio::io_context &io_context, boost::asio::ip::address_v6 
     Node(io_context),
     address_(std::move(address)),
     port_(port){
+    setDefaultListener();
 }
 
 void Client::run(){

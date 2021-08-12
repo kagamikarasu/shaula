@@ -143,12 +143,6 @@ private:
      * @param address
      */
     void _removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address);
-
-    /**
-     * Assign a default listener
-     * @param c
-     */
-    static void _addListeners(Client &c);
 };
 
 

@@ -10,8 +10,8 @@
 #ifndef SHAULA_LISTENER_ADDR_H
 #define SHAULA_LISTENER_ADDR_H
 
-
 #include "listener_if.h"
+#include "message/addr.h"
 
 class ListenerAddr : public ListenerIF{
 public:

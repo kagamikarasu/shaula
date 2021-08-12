@@ -72,6 +72,15 @@ NodeStruct Node::getStruct(){
     return {io_context_, socket_, timeout_, endpoint_, last_send_, last_recv_};
 }
 
+void Node::setDefaultListener() {
+    NodeStruct ns = getStruct();
+
+    listeners_.push_back(std::make_unique<ListenerVersion>(ns));
+    listeners_.push_back(std::make_unique<ListenerVerack>(ns));
+    listeners_.push_back(std::make_unique<ListenerAddr>(ns));
+    listeners_.push_back(std::make_unique<ListenerPing>(ns));
+}
+
 void Node::addListener(std::vector<std::unique_ptr<ListenerIF>> &listener) {
     listeners_ = std::move(listener);
 }

@@ -111,8 +111,6 @@ void ClientPool::_addCPool(boost::asio::io_context &io_context,
                            const boost::asio::ip::address_v6 &address,
                            uint16_t port){
     std::shared_ptr<Client> c = std::move(std::make_unique<Client>(io_context, address, port));
-    _addListeners(*c);
-
     c->run();
 
     // Key::Address + Value::Client
@@ -122,19 +120,6 @@ void ClientPool::_addCPool(boost::asio::io_context &io_context,
         thread_connection_manager_.insert(std::make_pair(&io_context, 0));
     }
     ++thread_connection_manager_.at(&io_context);
-}
-
-void ClientPool::_addListeners(Client& c){
-    std::vector<std::unique_ptr<ListenerIF>> listeners;
-
-    NodeStruct ns = c.getStruct();
-
-    listeners.push_back(std::make_unique<ListenerVersion>(ns));
-    listeners.push_back(std::make_unique<ListenerVerack>(ns));
-    listeners.push_back(std::make_unique<ListenerAddr>(ns));
-    listeners.push_back(std::make_unique<ListenerPing>(ns));
-
-    c.addListener(listeners);
 }
 
 void ClientPool::_removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
