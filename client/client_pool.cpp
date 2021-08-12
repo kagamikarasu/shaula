@@ -124,6 +124,12 @@ void ClientPool::_addCPool(boost::asio::io_context &io_context,
 
 void ClientPool::_removeCPool(boost::asio::io_context &io_context, const boost::asio::ip::address_v6 &address){
     auto itd = connection_pool_.find(address.to_string());
+
+    // just to be sure.
+    if(itd == connection_pool_.end()){
+        return;
+    }
+
     connection_pool_.erase(itd);
     --thread_connection_manager_.at(&io_context);
 }
